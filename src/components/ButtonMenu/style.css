@@ -1,0 +1,33 @@
+
+.menu-button {
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  height: 32px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+
+  cursor: pointer;
+  color: var(--neutral500);
+  transition: all 0.15s ease;
+}
+
+.menu-button:hover {
+  background-color: var(--neutral100);
+}
+
+.menu-button-active {
+  color: rgba(73, 69, 255, 1);
+  background-color: rgba(240, 240, 255, 1);
+}
+
+.menu-button-active:hover {
+  color: rgba(73, 69, 255, 1);
+  background-color: rgba(240, 240, 255, 1);
+}
+
+.menu-button-text {
+  font-size: 14px;
+}

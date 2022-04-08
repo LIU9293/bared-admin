@@ -1,0 +1,29 @@
+{
+  "name": "bared-admin",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "antd": "4.19.5",
+    "rc-table": "^7.24.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "react-redux": "7.2.8",
+    "react-router-dom": "6.3.0",
+    "redux": "4.1.2",
+    "redux-act": "1.8.0",
+    "redux-observable": "2.0.0",
+    "rxjs": "7.5.5",
+    "styled-components": "5.3.5",
+    "unfetch": "4.2.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "1.0.7",
+    "standard": "16.0.4",
+    "vite": "2.9.0"
+  }
+}
