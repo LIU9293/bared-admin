@@ -8,8 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "antd": "4.19.5",
-    "rc-table": "^7.24.1",
+    "rc-table": "7.24.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-redux": "7.2.8",
