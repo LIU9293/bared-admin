@@ -40,6 +40,38 @@ const api = {
     })
   },
 
+  getDetail: async (payload, jwt) => {
+    const { id, tableName } = payload
+    return await request({
+      method: 'get',
+      url: `/dapi/${tableName}/${id}`,
+      needToken: true,
+      jwt
+    })
+  },
+
+  updateTableItem: async (payload, jwt) => {
+    const { tableName, data } = payload
+    return await request({
+      method: 'put',
+      url: `/dapi/${tableName}`,
+      needToken: true,
+      jwt,
+      payload: data
+    })
+  },
+
+  createTableItem: async (payload, jwt) => {
+    const { tableName, data } = payload
+    return await request({
+      method: 'post',
+      url: `/dapi/${tableName}`,
+      needToken: true,
+      jwt,
+      payload: data
+    })
+  },
+
   deleteTableItem: async (payload, jwt) => {
     const { tableName, id } = payload
 

@@ -4,6 +4,7 @@ import { login } from '@store/auth/reducer'
 import { Routes, Route } from 'react-router-dom'
 import ContentDataPage from '@containers/ContentDataPage'
 import ContentApiPage from '@containers/ContentApiPage'
+import ContentDetailPage from '@containers/ContentDetailPage'
 import {
   MainNav,
   NavSection,
@@ -60,6 +61,7 @@ export default function App () {
             <Route path='/' element={(<div>homepage</div>)} />
             <Route path='/content' element={<ContentDataPage />} />
             <Route path='/content/:tableName' element={<ContentDataPage />} />
+            <Route path='/content-detail/:tableName/:id' element={<ContentDetailPage />} />
             <Route path='/content-api' element={<ContentApiPage />} />
             <Route path='/content-api/:tableName' element={<ContentApiPage />} />
           </Routes>

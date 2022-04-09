@@ -12,7 +12,12 @@ const DEFAULT_TABLE_DATA = {
 const INITIAL_STATE = {
   schemas: [],
   tableData: {},
-  api: {}
+  api: {},
+  contentDetail: {
+    loading: false,
+    error: null,
+    data: {}
+  }
 }
 
 export const getSchemas = createAction('get_schemas')
@@ -22,12 +27,28 @@ export const getTableData = createAction('get_table_data')
 export const setTableData = createAction('set_table_data')
 export const setTablePage = createAction('set_table_page')
 
-export const getApi = createAction('get_api')
-export const setApi = createAction('set_api')
-
+export const createTableItem = createAction('create_table_item')
+export const updateTableItem = createAction('update_table_item')
 export const deleteTableItem = createAction('delete_table_item')
 
+export const getDetail = createAction('get_detail')
+export const setDetail = createAction('set_detail')
+
+export const getApi = createAction('get_api')
+export const setApi = createAction('set_api')
+export const callApi = createAction('call_api')
+
 const contentReducer = createReducer({
+  [getDetail]: (state, payload) => ({
+    ...state,
+    contentDetail: { loading: true, error: null, data: {} }
+  }),
+
+  [setDetail]: (state, payload) => ({
+    ...state,
+    contentDetail: { loading: false, error: null, data: payload.data }
+  }),
+
   [setApi]: (state, payload) => ({
     ...state,
     api: {

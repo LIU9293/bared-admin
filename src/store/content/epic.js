@@ -4,15 +4,66 @@ import { switchMap, withLatestFrom } from 'rxjs/operators'
 import api from '@api'
 
 import { login } from '@store/auth/reducer'
-import { deleteTableItem, getApi, getSchemas, setSchemas, getTableData, setTableData, setApi } from './reducer'
+import {
+  deleteTableItem,
+  createTableItem,
+  updateTableItem,
+  getApi,
+  getSchemas,
+  setSchemas,
+  getTableData,
+  setTableData,
+  setApi,
+  getDetail,
+  setDetail
+} from './reducer'
+
+export const getDetailEpic = (action$, state$) => action$.pipe(
+  ofType(getDetail().type),
+  withLatestFrom(state$),
+  switchMap(([action, state]) => {
+    if (!state.auth.jwt) {
+      return of(login({ onLogin: action }))
+    }
+
+    return from(api.getDetail(action.payload, state.auth.jwt)).pipe(
+      switchMap(response => {
+        return of(setDetail({ data: response }))
+      })
+    )
+  })
+)
 
 export const deleteTableItemEpic = (action$, state$) => action$.pipe(
   ofType(deleteTableItem().type),
   withLatestFrom(state$),
   switchMap(([action, state]) =>
     from(api.deleteTableItem(action.payload, state.auth.jwt)).pipe(
-      switchMap((response) => {
-        console.log(response)
+      switchMap(_ => {
+        return of(getTableData({ tableName: action.payload.tableName }))
+      })
+    )
+  )
+)
+
+export const createTableItemEpic = (action$, state$) => action$.pipe(
+  ofType(createTableItem().type),
+  withLatestFrom(state$),
+  switchMap(([action, state]) =>
+    from(api.createTableItem(action.payload, state.auth.jwt)).pipe(
+      switchMap(_ => {
+        return of(getTableData({ tableName: action.payload.tableName }))
+      })
+    )
+  )
+)
+
+export const updateTableItemEpic = (action$, state$) => action$.pipe(
+  ofType(updateTableItem().type),
+  withLatestFrom(state$),
+  switchMap(([action, state]) =>
+    from(api.updateTableItem(action.payload, state.auth.jwt)).pipe(
+      switchMap(_ => {
         return of(getTableData({ tableName: action.payload.tableName }))
       })
     )

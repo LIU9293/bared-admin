@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { getTableData, deleteTableItem } from '@store/content/reducer'
 import { VisuallyHidden } from '@strapi/design-system/VisuallyHidden'
 import { IconButtonGroup, IconButton } from '@strapi/design-system/IconButton'
@@ -17,6 +17,7 @@ export default function ContentTable () {
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [deleteItem, setDeleteItem] = useState({})
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const tableData = useSelector(state => {
     const res = state.content.tableData[tableName]
@@ -49,6 +50,10 @@ export default function ContentTable () {
     console.log(item)
   }
 
+  const onRowClick = item => {
+    navigate(`/content-detail/${tableName}/${item.id}`)
+  }
+
   const { data, count } = tableData
   return (
     <Box padding={8} background='neutral100'>
@@ -68,7 +73,7 @@ export default function ContentTable () {
       >
         <Thead>
           <Tr>
-            {Object.keys(attributes).map(attr => {
+            {['id'].concat(Object.keys(attributes)).map(attr => {
               return (
                 <Th key={attr}>
                   <Typography variant='sigma'>{attr}</Typography>
@@ -85,7 +90,7 @@ export default function ContentTable () {
                 return (
                   <Tr key={item.id}>
                     {
-                      Object.keys(attributes).map(attr => {
+                      ['id'].concat(Object.keys(attributes)).map(attr => {
                         let cell = item[attr]
                         if (typeof cell === 'object') {
                           cell = JSON.stringify(cell).slice(0, 10)
@@ -100,7 +105,7 @@ export default function ContentTable () {
                         }
 
                         return (
-                          <Td key={attr}>
+                          <Td key={attr} onClick={() => onRowClick(item)} className='pointer'>
                             {cell}
                           </Td>
                         )

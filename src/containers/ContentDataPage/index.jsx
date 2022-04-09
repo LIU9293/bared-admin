@@ -7,8 +7,8 @@ import {
   SubNavSections,
   SubNavLink
 } from '@strapi/design-system/SubNav'
-import ContentTable from '@containers/ContentTable'
 import styled from 'styled-components'
+import ContentTable from './ContentTable'
 
 const ContentPageContainer = styled.div`
   display: flex;
