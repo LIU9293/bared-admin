@@ -11,7 +11,8 @@ const DEFAULT_TABLE_DATA = {
 
 const INITIAL_STATE = {
   schemas: [],
-  tableData: {}
+  tableData: {},
+  api: {}
 }
 
 export const getSchemas = createAction('get_schemas')
@@ -21,9 +22,18 @@ export const getTableData = createAction('get_table_data')
 export const setTableData = createAction('set_table_data')
 export const setTablePage = createAction('set_table_page')
 
-window.getSchemas = getSchemas
+export const getApi = createAction('get_api')
+export const setApi = createAction('set_api')
 
 const contentReducer = createReducer({
+  [setApi]: (state, payload) => ({
+    ...state,
+    api: {
+      ...state.api,
+      [payload.tableName]: payload.api
+    }
+  }),
+
   [setSchemas]: (state, payload) => {
     const newState = {
       ...state,
@@ -34,10 +44,15 @@ const contentReducer = createReducer({
       if (!newState.tableData[schema.tableName]) {
         newState.tableData[schema.tableName] = DEFAULT_TABLE_DATA
       }
+
+      if (!newState.api[schema.tableName]) {
+        newState.api[schema.tableName] = []
+      }
     })
 
     return newState
   },
+
   [getTableData]: (state, payload) => ({
     ...state,
     tableData: {
@@ -48,6 +63,7 @@ const contentReducer = createReducer({
       }
     }
   }),
+
   [setTablePage]: (state, payload) => ({
     ...state,
     tableData: {
@@ -58,6 +74,7 @@ const contentReducer = createReducer({
       }
     }
   }),
+
   [setTableData]: (state, payload) => ({
     ...state,
     tableData: {
@@ -70,6 +87,7 @@ const contentReducer = createReducer({
       }
     }
   })
+
 }, INITIAL_STATE)
 
 export default contentReducer

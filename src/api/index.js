@@ -16,13 +16,18 @@ const request = async ({
     headers.Authorization = `Bearer ${jwt}`
   }
 
-  const response = await fetch('http://localhost:3001' + url, {
-    method,
-    headers,
-    body: JSON.stringify(payload)
-  })
-  const data = await response.json()
-  return data
+  try {
+    const response = await fetch('http://localhost:3001' + url, {
+      method,
+      headers,
+      body: JSON.stringify(payload)
+    })
+    const data = await response.json()
+    return data
+  } catch (error) {
+    console.log(error.message)
+    return null
+  }
 }
 
 const api = {
@@ -32,6 +37,16 @@ const api = {
       url: '/auth/login/test',
       needToken: false,
       payload: { id: 1 }
+    })
+  },
+
+  getApi: async (payload, jwt) => {
+    const { tableName } = payload
+    return await request({
+      method: 'get',
+      url: `/dapi/routes/${tableName}`,
+      needToken: true,
+      jwt
     })
   },
 

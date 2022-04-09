@@ -8,6 +8,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@strapi/design-system": "^0.0.1-alpha.79",
+    "@strapi/icons": "^0.0.1-alpha.79",
     "rc-table": "7.24.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",

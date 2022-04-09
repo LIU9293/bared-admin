@@ -1,43 +1,67 @@
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import SideBar from '@components/SideBar'
 import { login } from '@store/auth/reducer'
-import { Routes, Route, useNavigate } from 'react-router-dom'
-import ContentTable from '@containers/ContentTable'
+import { Routes, Route } from 'react-router-dom'
+import ContentDataPage from '@containers/ContentDataPage'
+import ContentApiPage from '@containers/ContentApiPage'
+import {
+  MainNav,
+  NavSection,
+  NavSections,
+  NavCondense,
+  NavBrand,
+  NavUser,
+  NavLink
+} from '@strapi/design-system/MainNav'
+import { Divider } from '@strapi/design-system/Divider'
+import Layer from '@strapi/icons/Layer'
+import Puzzle from '@strapi/icons/Puzzle'
+import BaredLogo from '@assets/img/2.png'
 
 export default function App () {
   const user = useSelector(state => state.auth.user)
-  const schemas = useSelector(state => state.content.schemas)
-  const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [condensed, setCondensed] = useState(false)
 
-  const handleLogin = () => {
+  useEffect(() => {
     dispatch(login())
-  }
-
-  const handleSchemaClick = ({ tableName }) => {
-    navigate(`/content/${tableName}`)
-  }
-
-  const sidebarConfig = [{
-    title: 'Content Type',
-    items: schemas.map(schema => ({
-      title: schema.displayName || schema.tableName,
-      active: false,
-      onClick: () => handleSchemaClick(schema)
-    }))
-  }]
+  }, [])
 
   return (
     <div className='app'>
-      <SideBar user={user} config={sidebarConfig} onLogin={handleLogin} />
+      <MainNav condensed={condensed}>
+        <NavBrand
+          workplace='Workplace'
+          title='Bared CMS'
+          icon={<img src={BaredLogo} alt='' />}
+        />
+        <Divider />
+        <NavSections>
+          <NavSection label='Contents'>
+            <NavLink to='/content' icon={<Layer />}>
+              Content
+            </NavLink>
+            <NavLink to='/content-api' icon={<Puzzle />}>
+              Content API
+            </NavLink>
+          </NavSection>
+        </NavSections>
+        {user.name &&
+          <NavUser src={user.avatar} to='/'>
+            {user.name}
+          </NavUser>}
+        <NavCondense onClick={() => setCondensed(s => !s)}>
+          {condensed ? 'Expanded the navbar' : 'Collapse the navbar'}
+        </NavCondense>
+      </MainNav>
       <div className='container'>
         <div className='content'>
           <Routes>
-            <Route path='/' element={<div>Homepage</div>} />
-            <Route
-              path='/content/:tableName'
-              element={<ContentTable />}
-            />
+            <Route path='/' element={(<div>homepage</div>)} />
+            <Route path='/content' element={<ContentDataPage />} />
+            <Route path='/content/:tableName' element={<ContentDataPage />} />
+            <Route path='/content-api' element={<ContentApiPage />} />
+            <Route path='/content-api/:tableName' element={<ContentApiPage />} />
           </Routes>
         </div>
       </div>
