@@ -1,31 +1,61 @@
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { getTableData } from '@store/content/reducer'
+import { getTableData, deleteTableItem } from '@store/content/reducer'
+import { VisuallyHidden } from '@strapi/design-system/VisuallyHidden'
+import { IconButtonGroup, IconButton } from '@strapi/design-system/IconButton'
 import { Box } from '@strapi/design-system/Box'
 import { Table, TFooter, Thead, Tbody, Tr, Td, Th } from '@strapi/design-system/Table'
 import { Typography } from '@strapi/design-system/Typography'
 import Plus from '@strapi/icons/Plus'
+import Pencil from '@strapi/icons/Pencil'
+import Trash from '@strapi/icons/Trash'
+import ConfirmModal from '@components/ConfirmModal'
 
 export default function ContentTable () {
   const { tableName } = useParams()
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false)
+  const [deleteItem, setDeleteItem] = useState({})
   const dispatch = useDispatch()
+
   const tableData = useSelector(state => {
     const res = state.content.tableData[tableName]
     if (res && res.data) return res
     return { data: [] }
   })
+
   const attributes = useSelector(state => state.content.schemas.find(i => i.tableName === tableName)?.attributes) || {}
 
   useEffect(() => {
     if (tableName) {
       dispatch(getTableData({ tableName }))
     }
-  }, [tableData.page, tableData.pageSize, tableData.sort, tableName])
+  }, [tableName])
 
-  const { data } = tableData
+  const handleItemDelete = item => {
+    setDeleteItem(item)
+    setConfirmModalOpen(true)
+  }
+
+  const onDelete = () => {
+    dispatch(deleteTableItem({ tableName, id: deleteItem.id }))
+  }
+
+  const onConfirm = () => {
+    onDelete()
+  }
+
+  const handleItemUpdate = item => {
+    console.log(item)
+  }
+
+  const { data, count } = tableData
   return (
     <Box padding={8} background='neutral100'>
+      <Typography variant='alpha'>{tableName}</Typography>
+      <Box paddingBottom={4}>
+        <Typography variant='epsilon'>{`${count} items found.`}</Typography>
+      </Box>
       <Table
         colCount={6}
         rowCount={10}
@@ -34,7 +64,7 @@ export default function ContentTable () {
             icon={<Plus />}
           >Add another field to this collection type
           </TFooter>
-}
+        }
       >
         <Thead>
           <Tr>
@@ -45,6 +75,7 @@ export default function ContentTable () {
                 </Th>
               )
             })}
+            <Th><VisuallyHidden>Actions</VisuallyHidden></Th>
           </Tr>
         </Thead>
         {
@@ -75,12 +106,23 @@ export default function ContentTable () {
                         )
                       })
                     }
+                    <Td>
+                      <IconButtonGroup>
+                        <IconButton onClick={() => handleItemUpdate(item)} label='Edit' icon={<Pencil />} />
+                        <IconButton onClick={() => handleItemDelete(item)} label='Delete' icon={<Trash />} />
+                      </IconButtonGroup>
+                    </Td>
                   </Tr>
                 )
               })}
             </Tbody>
         }
       </Table>
+      <ConfirmModal
+        show={confirmModalOpen}
+        onCancel={() => setConfirmModalOpen(false)}
+        onConfirm={onConfirm}
+      />
     </Box>
   )
 }

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getApi } from '@store/content/reducer'
 import { Box } from '@strapi/design-system/Box'
+import { Typography } from '@strapi/design-system/Typography'
 import { Accordion, AccordionToggle, AccordionContent } from '@strapi/design-system/Accordion'
 
 export default function ContentApi () {
@@ -26,6 +27,10 @@ export default function ContentApi () {
 
   return (
     <Box padding={8} background='neutral100'>
+      <Typography variant='alpha'>{tableName}</Typography>
+      <Box paddingBottom={4}>
+        <Typography variant='epsilon'>Click to expand routes</Typography>
+      </Box>
       {
         api.map(item => {
           const key = `${item.method}_${item.url}`

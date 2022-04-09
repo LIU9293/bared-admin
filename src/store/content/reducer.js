@@ -25,6 +25,8 @@ export const setTablePage = createAction('set_table_page')
 export const getApi = createAction('get_api')
 export const setApi = createAction('set_api')
 
+export const deleteTableItem = createAction('delete_table_item')
+
 const contentReducer = createReducer({
   [setApi]: (state, payload) => ({
     ...state,

@@ -17,7 +17,7 @@ const request = async ({
   }
 
   try {
-    const response = await fetch('http://localhost:3001' + url, {
+    const response = await fetch('https://bared-cms-1804794-1311017114.ap-shanghai.run.tcloudbase.com' + url, {
       method,
       headers,
       body: JSON.stringify(payload)
@@ -37,6 +37,22 @@ const api = {
       url: '/auth/login/test',
       needToken: false,
       payload: { id: 1 }
+    })
+  },
+
+  deleteTableItem: async (payload, jwt) => {
+    const { tableName, id } = payload
+
+    if (tableName === 'user' && id === 1) {
+      window.alert('Cannot delete root user')
+      return
+    }
+
+    return await request({
+      method: 'delete',
+      url: `/dapi/${tableName}/${id}`,
+      needToken: true,
+      jwt
     })
   },
 

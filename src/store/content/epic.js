@@ -4,7 +4,20 @@ import { switchMap, withLatestFrom } from 'rxjs/operators'
 import api from '@api'
 
 import { login } from '@store/auth/reducer'
-import { getApi, getSchemas, setSchemas, getTableData, setTableData, setApi } from './reducer'
+import { deleteTableItem, getApi, getSchemas, setSchemas, getTableData, setTableData, setApi } from './reducer'
+
+export const deleteTableItemEpic = (action$, state$) => action$.pipe(
+  ofType(deleteTableItem().type),
+  withLatestFrom(state$),
+  switchMap(([action, state]) =>
+    from(api.deleteTableItem(action.payload, state.auth.jwt)).pipe(
+      switchMap((response) => {
+        console.log(response)
+        return of(getTableData({ tableName: action.payload.tableName }))
+      })
+    )
+  )
+)
 
 export const getSchemaEpic = (action$, state$) => action$.pipe(
   ofType(getSchemas().type),
