@@ -4,11 +4,17 @@
 
 * [x] Basic data table to show all the contents
 * [x] Basic UI to show routes created by developer
-* [ ] CRUD method to manipulate content data
+* [x] Let admin user login before anything else
+* [ ] CRUD method to manipulate content data (WIP)
+  * [ ] Create new item
+  * [ ] Read items, pagination, count...
+  * [ ] Update item
+  * [x] Delete item
 * [ ] Add sort, filter, search in content data table
 * [ ] Store column preference for each admin user somewhere
-* [ ] Let admin user login before anything else
 * [ ] Directly test API endpoint in UI
+* [ ] Errors page to read errors from server
+* [ ] Homepage to show some keyfigures (DAU, MAU, requests...)
 
 ### Core packages
 

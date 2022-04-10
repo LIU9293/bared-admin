@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { TextInput } from '@strapi/design-system/TextInput'
-import { Box } from '@strapi/design-system/Box'
 import { Button } from '@strapi/design-system/Button'
+import { Box } from '@strapi/design-system/Box'
+import { Typography } from '@strapi/design-system/Typography'
 import { Alert } from '@strapi/design-system/Alert'
 import { login } from '@store/auth/reducer'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { LoginBackground, LoginContainer } from './style'
 
 export default function LoginPage () {
   const [username, setUsername] = useState('')
@@ -41,8 +43,8 @@ export default function LoginPage () {
   }
 
   return (
-    <div className='app'>
-      <Box padding={10}>
+    <LoginBackground>
+      <LoginContainer>
         {
           error &&
             <Alert
@@ -54,24 +56,29 @@ export default function LoginPage () {
             </Alert>
         }
 
-        <TextInput
-          placeholder='Type your username'
-          label='Username'
-          name='Username'
-          onChange={e => setUsername(e.target.value)}
-          value={username}
-        />
-        <TextInput
-          placeholder='Type your password'
-          label='Password'
-          name='Password'
-          onChange={e => setPassword(e.target.value)}
-          value={password}
-        />
-        <Button onClick={handleLogin}>
+        <Typography variant='beta'>Bared CMS</Typography>
+        <Box paddingBottom={4} paddingTop={4}>
+          <TextInput
+            placeholder='Type your username'
+            label='Username'
+            name='Username'
+            onChange={e => setUsername(e.target.value)}
+            value={username}
+          />
+        </Box>
+        <Box paddingBottom={4}>
+          <TextInput
+            placeholder='Type your password'
+            label='Password'
+            name='Password'
+            onChange={e => setPassword(e.target.value)}
+            value={password}
+          />
+        </Box>
+        <Button onClick={handleLogin} fullWidth>
           Login
         </Button>
-      </Box>
-    </div>
+      </LoginContainer>
+    </LoginBackground>
   )
 }
