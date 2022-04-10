@@ -6,6 +6,7 @@ const INITIAL_STATE = {
 }
 
 export const login = createAction('login')
+export const getProfile = createAction('get_profile')
 export const setAuthData = createAction('set_auth_data')
 
 window.login = login

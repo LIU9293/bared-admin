@@ -4,14 +4,51 @@ import { useParams } from 'react-router-dom'
 import { getApi } from '@store/content/reducer'
 import { Box } from '@strapi/design-system/Box'
 import { Typography } from '@strapi/design-system/Typography'
+import { Badge } from '@strapi/design-system/Badge'
 import { Accordion, AccordionToggle, AccordionContent } from '@strapi/design-system/Accordion'
+
+const deveoperApi = tableName => ([
+  {
+    url: `/dapi/${tableName}/:id`,
+    method: 'GET',
+    description: 'Get item with ID'
+  },
+  {
+    url: `/dapi/${tableName}`,
+    method: 'GET',
+    description: 'Get data list with custom query',
+    query: true
+  },
+  {
+    url: `/dapi/${tableName}/count`,
+    method: 'GET',
+    description: 'Get total number of the content with custom query',
+    query: true
+  },
+  {
+    url: `/dapi/${tableName}/:id`,
+    method: 'PUT',
+    description: 'Get total number of the content with custom query',
+    params: true
+  },
+  {
+    url: `/dapi/${tableName}`,
+    method: 'POST',
+    description: 'Create an item',
+    params: true
+  },
+  {
+    url: `/dapi/${tableName}/:id`,
+    method: 'DELETE',
+    description: 'Delete an item'
+  }
+])
 
 export default function ContentApi () {
   const { tableName } = useParams()
   const [expandKey, setExpandKey] = useState('')
   const dispatch = useDispatch()
   const api = useSelector(state => state.content.api[tableName]) || []
-  console.log(api)
 
   useEffect(() => {
     dispatch(getApi({ tableName }))
@@ -27,8 +64,8 @@ export default function ContentApi () {
 
   return (
     <Box padding={8} background='neutral100'>
-      <Typography variant='alpha'>{tableName}</Typography>
-      <Box paddingBottom={4}>
+      <Typography variant='alpha'>{`${tableName.toUpperCase()} - User routes`}</Typography>
+      <Box paddingBottom={8}>
         <Typography variant='epsilon'>Click to expand routes</Typography>
       </Box>
       {
@@ -42,7 +79,8 @@ export default function ContentApi () {
               key={key}
             >
               <AccordionToggle
-                title={`${item.method} - ${item.url}`}
+                startIcon={<Badge active>{item.public ? 'Public' : 'Private'}</Badge>}
+                title={`${item.method.toUpperCase()} - ${item.public ? '/api' : '/papi'}${item.url}`}
                 description={item.description || ''}
               />
               <AccordionContent>
@@ -58,7 +96,37 @@ export default function ContentApi () {
           )
         })
       }
-
+      <Box paddingBottom={8} paddingTop={8}>
+        <Typography variant='alpha'>{`${tableName.toUpperCase()} - Developer routes`}</Typography>
+      </Box>
+      {
+        deveoperApi(tableName).map(item => {
+          const key = `${item.method}_${item.url}`
+          return (
+            <Accordion
+              expanded={expandKey === key}
+              toggle={() => handleToggle(key)}
+              id={key}
+              key={key}
+            >
+              <AccordionToggle
+                startIcon={<Badge active>Developer</Badge>}
+                title={`${item.method.toUpperCase()} - ${item.url}`}
+                description={item.description || ''}
+              />
+              <AccordionContent>
+                <Box padding={3}>
+                  {
+                    item.params
+                      ? JSON.stringify(item.params, null, 2)
+                      : 'No params defined in router file'
+                  }
+                </Box>
+              </AccordionContent>
+            </Accordion>
+          )
+        })
+      }
     </Box>
   )
 }
