@@ -5,14 +5,14 @@
 * [x] Basic data table to show all the contents
 * [x] Basic UI to show routes created by developer
 * [x] Let admin user login before anything else
-* [ ] CRUD method to manipulate content data (WIP)
-  * [ ] Create new item
+* [x] CRUD method to manipulate content data (WIP)
+  * [x] Create new item
   * [ ] Read items, pagination, count...
-  * [ ] Update item
+  * [x] Update item
   * [x] Delete item
+* [ ] Directly test API endpoint in UI
 * [ ] Add sort, filter, search in content data table
 * [ ] Store column preference for each admin user somewhere
-* [ ] Directly test API endpoint in UI
 * [ ] Errors page to read errors from server
 * [ ] Homepage to show some keyfigures (DAU, MAU, requests...)
 

@@ -26,6 +26,45 @@ const request = async ({
 }
 
 const api = {
+  callDapi: async (payload, jwt) => {
+    const { tableName, callMethod, id, ...requestBody } = payload
+    let url
+    let method
+
+    switch (callMethod) {
+      case 'get':
+        url = `/dapi/${tableName}/${id}`
+        method = 'get'
+        break
+      case 'getList':
+        url = `/dapi/${tableName}`
+        method = 'get'
+        break
+      case 'create':
+        url = `/dapi/${tableName}`
+        method = 'post'
+        break
+      case 'update':
+        url = `/dapi/${tableName}/${id}`
+        method = 'put'
+        break
+      case 'delete':
+        url = `/dapi/${tableName}/${id}`
+        method = 'delete'
+        break
+      default:
+        break
+    }
+
+    return await request({
+      method,
+      url,
+      needToken: true,
+      jwt,
+      payload: requestBody
+    })
+  },
+
   authLocal: async (payload) => {
     return await request({
       method: 'post',

@@ -43,11 +43,12 @@ export default function ContentTable () {
   }
 
   const onConfirm = () => {
+    setConfirmModalOpen(false)
     onDelete()
   }
 
-  const handleItemUpdate = item => {
-    console.log(item)
+  const onAddClick = () => {
+    navigate(`/content-detail/${tableName}/add`)
   }
 
   const onRowClick = item => {
@@ -64,12 +65,11 @@ export default function ContentTable () {
       <Table
         colCount={6}
         rowCount={10}
-        footer={
-          <TFooter
-            icon={<Plus />}
-          >Add another field to this collection type
+        footer={(
+          <TFooter icon={<Plus />} onClick={onAddClick}>
+            Add another field to this data type
           </TFooter>
-        }
+        )}
       >
         <Thead>
           <Tr>
@@ -113,7 +113,7 @@ export default function ContentTable () {
                     }
                     <Td>
                       <IconButtonGroup>
-                        <IconButton onClick={() => handleItemUpdate(item)} label='Edit' icon={<Pencil />} />
+                        <IconButton onClick={() => onRowClick(item)} label='Edit' icon={<Pencil />} />
                         <IconButton onClick={() => handleItemDelete(item)} label='Delete' icon={<Trash />} />
                       </IconButtonGroup>
                     </Td>

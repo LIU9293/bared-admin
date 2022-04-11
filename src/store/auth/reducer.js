@@ -9,8 +9,6 @@ export const login = createAction('login')
 export const getProfile = createAction('get_profile')
 export const setAuthData = createAction('set_auth_data')
 
-window.login = login
-
 const authRedcuer = createReducer({
   [setAuthData]: (state, payload) => ({
     ...state,
