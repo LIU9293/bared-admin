@@ -91,7 +91,7 @@ export default function ContentApi () {
                   baseUrl={baseUrl}
                   requestUrl={(item.public ? '/api' : '/papi') + item.url}
                   requestParams={item.params}
-                  public={item.public}
+                  isPublic={item.public}
                 />
               </AccordionContent>
             </Accordion>

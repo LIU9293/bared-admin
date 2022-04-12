@@ -11,7 +11,7 @@
   * [x] Update item
   * [x] Delete item
 * [x] Configure API URL when login
-* [ ] Directly test API endpoint in UI
+* [ ] Directly test API endpoint in UI, WIP
 * [ ] Add sort, filter, search in content data table
 * [ ] Store column preference for each admin user somewhere
 * [ ] Errors page to read errors from server

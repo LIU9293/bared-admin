@@ -38,7 +38,6 @@ export default function ContentDetail () {
   }, [callDapiStatus])
 
   const onValueChange = (e, attr) => {
-    console.log(e, attr)
     setInputData({
       ...inputData,
       [attr]: e

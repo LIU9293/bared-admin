@@ -6,6 +6,9 @@ import { TextInput } from '@strapi/design-system/TextInput'
 import { Button } from '@strapi/design-system/Button'
 import styled from 'styled-components'
 import { request } from '@api'
+import { NumberInput } from '@strapi/design-system/NumberInput'
+import CardSelect from '@components/CardSelect'
+import { Textarea } from '@strapi/design-system/Textarea'
 import ConfirmModal from '@components/ConfirmModal'
 import ReactJson from 'react-json-view'
 
@@ -27,24 +30,28 @@ export default function ApiRequestBox ({
   isPublic = false
 }) {
   // requestParams -> [ cover: {type: 'string', required: false} ]
-
-  if (requestParams) {
-    console.log(requestParams)
-  }
-
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [responseContent, setResponseContent] = useState({})
   const [urlParamsData, setUrlParamsData] = useState({})
+  const [inputData, setInputData] = useState({})
   const [url, setUrl] = useState(requestUrl)
   const urlParams = requestUrl.split('/').filter(i => i.slice(0, 1) === ':')
   const jwt = useSelector(state => state.auth.jwt)
+
+  const onValueChange = (e, attr) => {
+    setInputData({
+      ...inputData,
+      [attr]: e
+    })
+  }
 
   const handleRequestButtonClick = () => {
     request({
       method,
       url,
       needToken: !isPublic,
-      jwt
+      jwt,
+      payload: inputData
     })
       .then(response => {
         setConfirmModalOpen(true)
@@ -79,7 +86,7 @@ export default function ApiRequestBox ({
       {
           urlParams && urlParams.length > 0 &&
             <Section>
-              <Typography>URL Params</Typography>
+              <Typography style={{ marginBottom: 8 }}>URL Params</Typography>
               {
                 urlParams.map(param => {
                   return (
@@ -93,6 +100,62 @@ export default function ApiRequestBox ({
                       />
                     </Flex>
 
+                  )
+                })
+              }
+            </Section>
+        }
+      {
+          requestParams && Object.keys(requestParams).length > 0 &&
+            <Section>
+              <Typography style={{ marginBottom: 8 }}>Request Params</Typography>
+              {
+                Object.keys(requestParams).map(attr => {
+                  // param -> username
+                  const config = requestParams[attr]
+                  // paramConfig ->  { type: 'string', required: true }
+                  return (
+                    <Flex key={attr}>
+                      {config.type === 'string' &&
+                        <TextInput
+                          name={attr}
+                          label={attr}
+                          value={inputData[attr] || ''}
+                          onChange={e => onValueChange(e.target.value, attr)}
+                        />}
+                      {config.type === 'json' &&
+                        <Textarea
+                          label={attr}
+                          name={attr}
+                          onChange={e => onValueChange(e.target.value, attr)}
+                          value={inputData[attr] || ''}
+                        />}
+                      {config.type === 'integer' &&
+                        <NumberInput
+                          name={attr}
+                          label={attr}
+                          value={parseInt(inputData[attr]) || undefined}
+                          onValueChange={e => onValueChange(e, attr)}
+                        />}
+                      {config.type === 'boolean' &&
+                        <Flex direction='column' alignItems='flex-start'>
+                          <Typography variant='pi' fontWeight='bold'>{attr}</Typography>
+                          <Flex>
+                            <CardSelect
+                              style={{ marginTop: 12, marginRight: 12 }}
+                              title='On'
+                              selected={inputData[attr] === true}
+                              onClick={() => onValueChange(true, attr)}
+                            />
+                            <CardSelect
+                              style={{ marginTop: 12 }}
+                              title='Off'
+                              selected={inputData[attr] === false}
+                              onClick={() => onValueChange(false, attr)}
+                            />
+                          </Flex>
+                        </Flex>}
+                    </Flex>
                   )
                 })
               }
