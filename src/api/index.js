@@ -161,7 +161,10 @@ const api = {
       sort = 'created_at:desc'
     } = payload
 
-    const q = new URLSearchParams({ page, pageSize, sort })
+    const _start = (page - 1) * pageSize
+    const _limit = pageSize
+
+    const q = new URLSearchParams({ _start, _limit, _sort: sort })
     const result = await Promise.all([
       request({
         method: 'get',

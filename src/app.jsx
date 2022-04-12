@@ -41,6 +41,7 @@ export default function App () {
       >
         <Route path='content' element={<ContentDataPage />} />
         <Route path='content/:tableName' element={<ContentDataPage />} />
+        <Route path='content/:tableName/:page' element={<ContentDataPage />} />
         <Route path='content-detail/:tableName/:id' element={<ContentDetailPage />} />
         <Route path='content-api' element={<ContentApiPage />} />
         <Route path='content-api/:tableName' element={<ContentApiPage />} />

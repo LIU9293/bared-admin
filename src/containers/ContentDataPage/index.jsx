@@ -20,6 +20,9 @@ const ContentPageContent = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
+
+  max-height: 100vh;
+  overflow-y: auto;
 `
 
 export default function ContentDataPage () {

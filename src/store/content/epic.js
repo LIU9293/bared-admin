@@ -40,7 +40,11 @@ export const deleteTableItemEpic = (action$, state$) => action$.pipe(
   switchMap(([action, state]) =>
     from(api.deleteTableItem(action.payload, state.auth.jwt)).pipe(
       switchMap(_ => {
-        return of(getTableData({ tableName: action.payload.tableName }))
+        return of(getTableData({
+          tableName: action.payload.tableName,
+          page: action.payload.page,
+          pageSize: action.payload.pageSize
+        }))
       })
     )
   )
@@ -114,7 +118,7 @@ export const getTableDataEpic = (action$, state$) => action$.pipe(
         return concat(
           of(setTableData({
             tableName: action.payload.tableName,
-            count: response[1],
+            count: response[1].count,
             data: response[0]
           }))
         )

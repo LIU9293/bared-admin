@@ -5,17 +5,26 @@ import { getTableData, deleteTableItem } from '@store/content/reducer'
 import { VisuallyHidden } from '@strapi/design-system/VisuallyHidden'
 import { IconButtonGroup, IconButton } from '@strapi/design-system/IconButton'
 import { Box } from '@strapi/design-system/Box'
+import { Flex } from '@strapi/design-system/Flex'
 import { Table, TFooter, Thead, Tbody, Tr, Td, Th } from '@strapi/design-system/Table'
 import { Typography } from '@strapi/design-system/Typography'
 import Plus from '@strapi/icons/Plus'
 import Pencil from '@strapi/icons/Pencil'
 import Trash from '@strapi/icons/Trash'
 import ConfirmModal from '@components/ConfirmModal'
+import { NextLink, Pagination, PreviousLink } from '@strapi/design-system/Pagination'
+
+const pageSize = 20
 
 export default function ContentTable () {
-  const { tableName } = useParams()
+  const { tableName, page = 1 } = useParams()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [deleteItem, setDeleteItem] = useState({})
+
+  // const [page, setPage] = useState(1)
+  // const [pageSize, setPageSize] = useState(20)
+  // const [pageSize, setPageSize] = useState(20)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -29,9 +38,13 @@ export default function ContentTable () {
 
   useEffect(() => {
     if (tableName) {
-      dispatch(getTableData({ tableName }))
+      dispatch(getTableData({
+        tableName,
+        page: parseInt(page),
+        pageSize
+      }))
     }
-  }, [tableName])
+  }, [tableName, page])
 
   const handleItemDelete = item => {
     setDeleteItem(item)
@@ -56,6 +69,9 @@ export default function ContentTable () {
   }
 
   const { data, count } = tableData
+
+  const isFirstPage = parseInt(page) === 1
+  const isLastPage = parseInt(page) === Math.ceil(count / pageSize)
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{tableName}</Typography>
@@ -123,6 +139,19 @@ export default function ContentTable () {
             </Tbody>
         }
       </Table>
+      <Flex justifyContent='flex-end' paddingBottom={4} paddingTop={4}>
+        <Pagination activePage={parseInt(page)} pageCount={Math.ceil(count / pageSize)}>
+          {
+            !isFirstPage &&
+              <PreviousLink to={`/content/${tableName}/${parseInt(page) - 1}`}>Previous</PreviousLink>
+          }
+          {
+            !isLastPage &&
+              <NextLink to={`/content/${tableName}/${parseInt(page) + 1}`}>Next</NextLink>
+          }
+        </Pagination>
+      </Flex>
+
       <ConfirmModal
         show={confirmModalOpen}
         onCancel={() => setConfirmModalOpen(false)}

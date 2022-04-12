@@ -9,8 +9,7 @@ export const getProfileEpic = (action$, state$) => action$.pipe(
   withLatestFrom(state$),
   switchMap(([action, state]) =>
     from(api.callDapi(action.payload, state.auth.jwt)).pipe(
-      switchMap((response) => {
-        console.log(response)
+      switchMap(_ => {
         return of(
           setCallDapiStatus({ status: true })
         )
