@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { getApi } from '@store/content/reducer'
 import { Box } from '@strapi/design-system/Box'
 import { Typography } from '@strapi/design-system/Typography'
 import { Badge } from '@strapi/design-system/Badge'
 import { Accordion, AccordionToggle, AccordionContent } from '@strapi/design-system/Accordion'
+import ApiRequestBox from '@components/ApiRequestBox'
 
 const deveoperApi = tableName => ([
   {
@@ -49,6 +50,7 @@ export default function ContentApi () {
   const [expandKey, setExpandKey] = useState('')
   const dispatch = useDispatch()
   const api = useSelector(state => state.content.api[tableName]) || []
+  const baseUrl = window.localStorage.getItem('endpoint')
 
   useEffect(() => {
     dispatch(getApi({ tableName }))
@@ -84,13 +86,13 @@ export default function ContentApi () {
                 description={item.description || ''}
               />
               <AccordionContent>
-                <Box padding={3}>
-                  {
-                    item.params
-                      ? JSON.stringify(item.params, null, 2)
-                      : 'No params defined in router file'
-                  }
-                </Box>
+                <ApiRequestBox
+                  method={item.method}
+                  baseUrl={baseUrl}
+                  requestUrl={(item.public ? '/api' : '/papi') + item.url}
+                  requestParams={item.params}
+                  public={item.public}
+                />
               </AccordionContent>
             </Accordion>
           )
@@ -115,13 +117,13 @@ export default function ContentApi () {
                 description={item.description || ''}
               />
               <AccordionContent>
-                <Box padding={3}>
-                  {
-                    item.params
-                      ? JSON.stringify(item.params, null, 2)
-                      : 'No params defined in router file'
-                  }
-                </Box>
+                <ApiRequestBox
+                  method={item.method}
+                  baseUrl={baseUrl}
+                  requestUrl={item.url}
+                  isPublic={false}
+                  tableName={tableName}
+                />
               </AccordionContent>
             </Accordion>
           )

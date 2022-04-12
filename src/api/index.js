@@ -1,6 +1,6 @@
 import fetch from 'unfetch'
 
-const request = async ({
+export const request = async ({
   method,
   url,
   needToken,
@@ -16,7 +16,8 @@ const request = async ({
     headers.Authorization = `Bearer ${jwt}`
   }
 
-  const response = await fetch(import.meta.env.VITE_API_URL + url, {
+  const endpoint = window.localStorage.getItem('endpoint')
+  const response = await fetch(endpoint + url, {
     method,
     headers,
     body: JSON.stringify(payload)

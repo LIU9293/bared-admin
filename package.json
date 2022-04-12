@@ -13,6 +13,7 @@
     "rc-table": "7.24.1",
     "react": "18.0.0",
     "react-dom": "18.0.0",
+    "react-json-view": "^1.21.3",
     "react-redux": "7.2.8",
     "react-router-dom": "6.3.0",
     "redux": "4.1.2",

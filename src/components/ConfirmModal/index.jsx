@@ -2,7 +2,7 @@ import { ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design
 import { Typography } from '@strapi/design-system/Typography'
 import { Button } from '@strapi/design-system/Button'
 
-export default function ConfirmModal ({ show, onCancel, onConfirm, title, content }) {
+export default function ConfirmModal ({ show, onCancel, onConfirm, title, content, ContentComponent = null, hideCancel = false }) {
   if (!show) return null
 
   return (
@@ -13,12 +13,15 @@ export default function ConfirmModal ({ show, onCancel, onConfirm, title, conten
         </Typography>
       </ModalHeader>
       <ModalBody>
-        <Typography variant='omega'>{content || 'Do you confirm?'}</Typography>
+        {
+          ContentComponent || <Typography variant='omega'>{content || 'Do you confirm?'}</Typography>
+        }
       </ModalBody>
       <ModalFooter
         endActions={(
           <>
-            <Button variant='secondary' onClick={onCancel}>Cancel</Button>
+            {!hideCancel &&
+              <Button variant='secondary' onClick={onCancel}>Cancel</Button>}
             <Button onClick={onConfirm}>Confirm</Button>
           </>
         )}

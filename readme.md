@@ -10,6 +10,7 @@
   * [ ] Read items, pagination, count...
   * [x] Update item
   * [x] Delete item
+* [x] Configure API URL when login
 * [ ] Directly test API endpoint in UI
 * [ ] Add sort, filter, search in content data table
 * [ ] Store column preference for each admin user somewhere

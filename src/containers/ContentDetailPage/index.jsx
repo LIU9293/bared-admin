@@ -77,6 +77,10 @@ export default function ContentDetail () {
           const config = attributes[attr]
           const data = contentDetail.data[attr]
 
+          if (config.type === 'json') {
+            console.log(JSON.stringify(data), inputData[attr], data)
+          }
+
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&
@@ -90,7 +94,7 @@ export default function ContentDetail () {
                 <NumberInput
                   name={attr}
                   label={attr}
-                  value={parseInt(inputData[attr]) || parseInt(data) || undefined}
+                  value={parseInt(inputData[attr]) || data || undefined}
                   onValueChange={e => onValueChange(e, attr)}
                 />}
               {config.type === 'boolean' &&
@@ -124,7 +128,9 @@ export default function ContentDetail () {
                   onChange={e => {
                     onValueChange(e.target.value, attr)
                   }}
-                  value={inputData[attr] || data}
+                  value={typeof inputData[attr] === 'undefined'
+                    ? JSON.stringify(data)
+                    : inputData[attr]}
                 />}
               {config.type === 'enum' &&
                 <Flex direction='column' alignItems='flex-start'>

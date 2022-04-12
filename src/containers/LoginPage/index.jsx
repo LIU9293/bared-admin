@@ -5,7 +5,7 @@ import { Button } from '@strapi/design-system/Button'
 import { Box } from '@strapi/design-system/Box'
 import { Typography } from '@strapi/design-system/Typography'
 import { Alert } from '@strapi/design-system/Alert'
-import { login } from '@store/auth/reducer'
+import { login, setEndpoint } from '@store/auth/reducer'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { LoginBackground, LoginContainer } from './style'
 
@@ -19,6 +19,7 @@ export default function LoginPage () {
   const from = location.state?.from?.pathname || '/'
 
   const jwt = useSelector(state => state.auth.jwt)
+  const endpoint = useSelector(state => state.auth.endpoint)
 
   useEffect(() => {
     if (jwt) {
@@ -28,6 +29,7 @@ export default function LoginPage () {
   }, [jwt])
 
   const onLogin = () => {
+    window.localStorage.setItem('endpoint', endpoint)
     dispatch(
       login({ username, password })
     )
@@ -40,6 +42,10 @@ export default function LoginPage () {
     }
     setError(null)
     onLogin()
+  }
+
+  const handleSetEndpoint = endpoint => {
+    dispatch(setEndpoint({ endpoint }))
   }
 
   return (
@@ -57,6 +63,15 @@ export default function LoginPage () {
         }
 
         <Typography variant='beta'>Bared CMS</Typography>
+        <Box paddingBottom={4} paddingTop={4}>
+          <TextInput
+            placeholder='Type your server endpoint'
+            label='Endpoint'
+            name='Endpoint'
+            onChange={e => handleSetEndpoint(e.target.value)}
+            value={endpoint}
+          />
+        </Box>
         <Box paddingBottom={4} paddingTop={4}>
           <TextInput
             placeholder='Type your username'
