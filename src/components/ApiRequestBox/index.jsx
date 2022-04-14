@@ -15,11 +15,18 @@ import ReactJson from 'react-json-view'
 const Section = styled.div`
   display: flex;
   flex-direction: column;
-  padding: 12px;
+  padding: 18px;
   border-radius: 4px;
   background: white;
   margin-top: 12px;
   width: 100%;
+`
+
+const StyledFlex = styled(Flex)`
+  > div {
+    width: 100%;
+    margin-bottom: 12px;
+  }
 `
 
 export default function ApiRequestBox ({
@@ -27,13 +34,15 @@ export default function ApiRequestBox ({
   method,
   baseUrl,
   requestUrl,
-  isPublic = false
+  isPublic = false,
+  showQuery = false
 }) {
   // requestParams -> [ cover: {type: 'string', required: false} ]
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [responseContent, setResponseContent] = useState({})
   const [urlParamsData, setUrlParamsData] = useState({})
   const [inputData, setInputData] = useState({})
+  const [queryInput, setQueryInput] = useState('')
   const [url, setUrl] = useState(requestUrl)
   const urlParams = requestUrl.split('/').filter(i => i.slice(0, 1) === ':')
   const jwt = useSelector(state => state.auth.jwt)
@@ -71,14 +80,18 @@ export default function ApiRequestBox ({
 
   useEffect(() => {
     const originalUrl = requestUrl
-    let nextUrl
+    let nextUrl = requestUrl
     if (Object.keys(urlParamsData).length > 0) {
       for (const i in urlParamsData) {
         nextUrl = originalUrl.replace(i, urlParamsData[i])
       }
-      setUrl(nextUrl)
     }
-  }, [urlParamsData])
+
+    if (queryInput) {
+      nextUrl = nextUrl + '?' + queryInput
+    }
+    setUrl(nextUrl)
+  }, [urlParamsData, queryInput])
 
   return (
     <Flex padding={4} direction='column' alignItems='flex-start'>
@@ -90,7 +103,7 @@ export default function ApiRequestBox ({
               {
                 urlParams.map(param => {
                   return (
-                    <Flex key={param}>
+                    <StyledFlex key={param}>
                       <Typography style={{ marginRight: 8 }}>{param.replace(':', '').toUpperCase()}</Typography>
                       <TextInput
                         aria-label={param}
@@ -98,8 +111,7 @@ export default function ApiRequestBox ({
                         value={urlParamsData[param] || ''}
                         onChange={e => handleSetUrlParamsData(param, e.target.value)}
                       />
-                    </Flex>
-
+                    </StyledFlex>
                   )
                 })
               }
@@ -115,7 +127,7 @@ export default function ApiRequestBox ({
                   const config = requestParams[attr]
                   // paramConfig ->  { type: 'string', required: true }
                   return (
-                    <Flex key={attr}>
+                    <StyledFlex key={attr}>
                       {config.type === 'string' &&
                         <TextInput
                           name={attr}
@@ -155,12 +167,26 @@ export default function ApiRequestBox ({
                             />
                           </Flex>
                         </Flex>}
-                    </Flex>
+                    </StyledFlex>
                   )
                 })
               }
             </Section>
         }
+      {
+        showQuery &&
+          <Section>
+            <Typography style={{ marginBottom: 8 }}>URL Query</Typography>
+            <Flex>
+              <TextInput
+                name='URL Query'
+                label='URL Query'
+                value={queryInput}
+                onChange={e => setQueryInput(e.target.value)}
+              />
+            </Flex>
+          </Section>
+      }
       <Flex paddingTop={4}>
         <Button onClick={handleRequestButtonClick}>Request</Button>
       </Flex>

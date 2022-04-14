@@ -92,6 +92,7 @@ export default function ContentApi () {
                   requestUrl={(item.public ? '/api' : '/papi') + item.url}
                   requestParams={item.params}
                   isPublic={item.public}
+                  showQuery={item.query}
                 />
               </AccordionContent>
             </Accordion>
@@ -123,6 +124,7 @@ export default function ContentApi () {
                   requestUrl={item.url}
                   isPublic={false}
                   tableName={tableName}
+                  showQuery={item.query}
                 />
               </AccordionContent>
             </Accordion>

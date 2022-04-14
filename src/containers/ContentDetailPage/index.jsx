@@ -18,7 +18,9 @@ export default function ContentDetail () {
   const isAdd = id === 'add'
 
   const dispatch = useDispatch()
-  const contentDetail = useSelector(state => state.content.contentDetail)
+  const contentDetail = isAdd
+    ? { data: {} }
+    : useSelector(state => state.content.contentDetail)
   const attributes = useSelector(state => state.content.schemas.find(i => i.tableName === tableName)?.attributes) || {}
 
   const [inputData, setInputData] = useState({})
@@ -29,6 +31,12 @@ export default function ContentDetail () {
       dispatch(getDetail({ tableName, id }))
     }
   }, [])
+
+  useEffect(() => {
+    if (id === 'add') {
+      setInputData({})
+    }
+  }, [id])
 
   useEffect(() => {
     if (callDapiStatus) {
@@ -75,11 +83,6 @@ export default function ContentDetail () {
         Object.keys(attributes).map(attr => {
           const config = attributes[attr]
           const data = contentDetail.data[attr]
-
-          if (config.type === 'json') {
-            console.log(JSON.stringify(data), inputData[attr], data)
-          }
-
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&

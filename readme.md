@@ -18,7 +18,7 @@
 * [ ] Add sort, filter, search in content data table
   * [ ] Sort
   * [ ] Filter
-  * [ ] Search
+  * [x] Search
 * [ ] Store column preference for each admin user somewhere
 * [ ] Errors page to read errors from server
 * [ ] Homepage to show some keyfigures (DAU, MAU, requests...)
