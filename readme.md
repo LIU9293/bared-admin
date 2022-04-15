@@ -14,11 +14,12 @@
 * [x] Directly test API endpoint in UI, WIP
   * [x] Url params
   * [x] User routes request params (defined in .router.js)
-  * [ ] DAPI request params (read from content schema)
+  * [x] DAPI request params (read from content schema)
+  * [x] Handle error and display error message
 * [ ] Add sort, filter, search in content data table
-  * [ ] Sort
+  * [x] Sort
   * [ ] Filter
-  * [x] Search
+  * [ ] Search
 * [ ] Store column preference for each admin user somewhere
 * [ ] Errors page to read errors from server
 * [ ] Homepage to show some keyfigures (DAU, MAU, requests...)

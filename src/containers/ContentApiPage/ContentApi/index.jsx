@@ -8,48 +8,55 @@ import { Badge } from '@strapi/design-system/Badge'
 import { Accordion, AccordionToggle, AccordionContent } from '@strapi/design-system/Accordion'
 import ApiRequestBox from '@components/ApiRequestBox'
 
-const deveoperApi = tableName => ([
-  {
-    url: `/dapi/${tableName}/:id`,
-    method: 'GET',
-    description: 'Get item with ID'
-  },
-  {
-    url: `/dapi/${tableName}`,
-    method: 'GET',
-    description: 'Get data list with custom query',
-    query: true
-  },
-  {
-    url: `/dapi/${tableName}/count`,
-    method: 'GET',
-    description: 'Get total number of the content with custom query',
-    query: true
-  },
-  {
-    url: `/dapi/${tableName}/:id`,
-    method: 'PUT',
-    description: 'Get total number of the content with custom query',
-    params: true
-  },
-  {
-    url: `/dapi/${tableName}`,
-    method: 'POST',
-    description: 'Create an item',
-    params: true
-  },
-  {
-    url: `/dapi/${tableName}/:id`,
-    method: 'DELETE',
-    description: 'Delete an item'
-  }
-])
+const deveoperApi = (tableName, schemas) => {
+  const attributes = schemas.find(i => i.tableName === tableName)?.attributes || {}
+  console.log(attributes)
+  return [
+    {
+      url: `/dapi/${tableName}/:id`,
+      method: 'GET',
+      description: 'Get item with ID'
+    },
+    {
+      url: `/dapi/${tableName}`,
+      method: 'GET',
+      description: 'Get data list with custom query',
+      query: true
+    },
+    {
+      url: `/dapi/${tableName}/count`,
+      method: 'GET',
+      description: 'Get total number of the content with custom query',
+      query: true
+    },
+    {
+      url: `/dapi/${tableName}/:id`,
+      method: 'PUT',
+      description: 'Get total number of the content with custom query',
+      params: true,
+      attributes
+    },
+    {
+      url: `/dapi/${tableName}`,
+      method: 'POST',
+      description: 'Create an item',
+      params: true,
+      attributes
+    },
+    {
+      url: `/dapi/${tableName}/:id`,
+      method: 'DELETE',
+      description: 'Delete an item'
+    }
+  ]
+}
 
 export default function ContentApi () {
   const { tableName } = useParams()
   const [expandKey, setExpandKey] = useState('')
   const dispatch = useDispatch()
   const api = useSelector(state => state.content.api[tableName]) || []
+  const schemas = useSelector(state => state.content.schemas)
   const baseUrl = window.localStorage.getItem('endpoint')
 
   useEffect(() => {
@@ -103,7 +110,7 @@ export default function ContentApi () {
         <Typography variant='alpha'>{`${tableName.toUpperCase()} - Developer routes`}</Typography>
       </Box>
       {
-        deveoperApi(tableName).map(item => {
+        deveoperApi(tableName, schemas).map(item => {
           const key = `${item.method}_${item.url}`
           return (
             <Accordion
@@ -125,6 +132,7 @@ export default function ContentApi () {
                   isPublic={false}
                   tableName={tableName}
                   showQuery={item.query}
+                  requestParams={item.attributes}
                 />
               </AccordionContent>
             </Accordion>

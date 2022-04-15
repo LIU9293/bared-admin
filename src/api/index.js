@@ -22,6 +22,17 @@ export const request = async ({
     headers,
     body: JSON.stringify(payload)
   })
+
+  if (!response.ok) {
+    const body = await response.text()
+    return {
+      success: false,
+      code: response.status,
+      text: response.statusText,
+      message: body
+    }
+  }
+
   const data = await response.json()
   return data
 }
@@ -158,13 +169,14 @@ const api = {
     const {
       page = 1,
       pageSize = 20,
-      sort = 'created_at:desc'
+      sortKey = 'id',
+      sortDirection = 'desc'
     } = payload
 
     const _start = (page - 1) * pageSize
     const _limit = pageSize
 
-    const q = new URLSearchParams({ _start, _limit, _sort: sort })
+    const q = new URLSearchParams({ _start, _limit, _sort: `${sortKey}:${sortDirection}` })
     const result = await Promise.all([
       request({
         method: 'get',

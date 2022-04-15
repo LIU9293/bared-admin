@@ -43,6 +43,7 @@ export default function ApiRequestBox ({
   const [urlParamsData, setUrlParamsData] = useState({})
   const [inputData, setInputData] = useState({})
   const [queryInput, setQueryInput] = useState('')
+  const [isResponseError, setResponseError] = useState(false)
   const [url, setUrl] = useState(requestUrl)
   const urlParams = requestUrl.split('/').filter(i => i.slice(0, 1) === ':')
   const jwt = useSelector(state => state.auth.jwt)
@@ -65,6 +66,12 @@ export default function ApiRequestBox ({
       .then(response => {
         setConfirmModalOpen(true)
         setResponseContent(response)
+
+        if (!response.success) {
+          setResponseError(true)
+        } else {
+          setResponseError(false)
+        }
       })
       .catch(err => {
         console.log(err)
@@ -191,6 +198,8 @@ export default function ApiRequestBox ({
         <Button onClick={handleRequestButtonClick}>Request</Button>
       </Flex>
       <ConfirmModal
+        confirmText='Close'
+        title={isResponseError ? 'Request Error' : 'Request Succeed'}
         show={confirmModalOpen}
         hideCancel
         onCancel={() => setConfirmModalOpen(false)}
