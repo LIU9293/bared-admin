@@ -30,8 +30,8 @@ const pageSize = 20
 //   'is bigger than or equal'
 // ]
 
-export default function ContentTable () {
-  const { tableName, page = 1 } = useParams()
+export default function ContentTable ({ table }) {
+  const { tableName = table, page = 1 } = useParams()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   // const [filterAreaOpen, setFilterAreaOpen] = useState(false)
   const [deleteItem, setDeleteItem] = useState({})
@@ -152,7 +152,7 @@ export default function ContentTable () {
                       allColumns.map(attr => {
                         const attrSetting = attributes[attr]
                         let cell = item[attr]
-                        if (typeof cell === 'object') {
+                        if (cell && typeof cell === 'object') {
                           cell = JSON.stringify(cell).slice(0, 10) + '...'
                         }
 

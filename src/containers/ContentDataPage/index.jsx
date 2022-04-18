@@ -34,7 +34,7 @@ export default function ContentDataPage () {
         <SubNavHeader label='View Contents' />
         <SubNavSections>
           <SubNavSection label='Data'>
-            {schemas.map(schema =>
+            {schemas.filter(i => !i.hideInAdmin).map(schema =>
               <SubNavLink
                 to={`/content/${schema.tableName}`}
                 key={schema.tableName}

@@ -14,6 +14,7 @@ import {
 } from '@strapi/design-system/MainNav'
 import Layer from '@strapi/icons/Layer'
 import Puzzle from '@strapi/icons/Puzzle'
+import FileError from '@strapi/icons/FileError'
 
 export default function MainLayout () {
   const user = useSelector(state => state.auth.user)
@@ -34,6 +35,9 @@ export default function MainLayout () {
             </NavLink>
             <NavLink to='/content-api' icon={<Puzzle />}>
               Content API
+            </NavLink>
+            <NavLink to='/errors' icon={<FileError />}>
+              Errors
             </NavLink>
           </NavSection>
         </NavSections>

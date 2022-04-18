@@ -31,7 +31,7 @@ export default function ContentApiPage () {
         <SubNavHeader label='View Contents' />
         <SubNavSections>
           <SubNavSection label='Data'>
-            {schemas.map(schema =>
+            {schemas.filter(i => !i.hideInAdmin).map(schema =>
               <SubNavLink
                 to={`/content-api/${schema.tableName}`}
                 key={schema.tableName}

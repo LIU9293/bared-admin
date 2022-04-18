@@ -4,6 +4,7 @@ import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import ContentDataPage from '@containers/ContentDataPage'
 import ContentApiPage from '@containers/ContentApiPage'
 import ContentDetailPage from '@containers/ContentDetailPage'
+import ErrorsPage from '@containers/ErrorsPage'
 import LoginPage from '@containers/LoginPage'
 import MainLayout from '@containers/MainLayout'
 import { getProfile } from '@store/auth/reducer'
@@ -45,6 +46,7 @@ export default function App () {
         <Route path='content-detail/:tableName/:id' element={<ContentDetailPage />} />
         <Route path='content-api' element={<ContentApiPage />} />
         <Route path='content-api/:tableName' element={<ContentApiPage />} />
+        <Route path='errors' element={<ErrorsPage />} />
       </Route>
     </Routes>
   )

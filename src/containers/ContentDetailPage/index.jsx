@@ -124,7 +124,7 @@ export default function ContentDetail () {
                   </Flex>
 
                 </Flex>}
-              {config.type === 'json' &&
+              {(config.type === 'json' || config.type === 'text') &&
                 <Textarea
                   label={attr}
                   name={attr}

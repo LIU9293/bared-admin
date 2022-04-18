@@ -77,35 +77,33 @@ export default function ContentApi () {
       <Box paddingBottom={8}>
         <Typography variant='epsilon'>Click to expand routes</Typography>
       </Box>
-      {
-        api.map(item => {
-          const key = `${item.method}_${item.url}`
-          return (
-            <Accordion
-              expanded={expandKey === key}
-              toggle={() => handleToggle(key)}
-              id={key}
-              key={key}
-            >
-              <AccordionToggle
-                startIcon={<Badge active>{item.public ? 'Public' : 'Private'}</Badge>}
-                title={`${item.method.toUpperCase()} - ${item.public ? '/api' : '/papi'}${item.url}`}
-                description={item.description || ''}
+      {api && api.length > 0 && api.map(item => {
+        const key = `${item.method}_${item.url}`
+        return (
+          <Accordion
+            expanded={expandKey === key}
+            toggle={() => handleToggle(key)}
+            id={key}
+            key={key}
+          >
+            <AccordionToggle
+              startIcon={<Badge active>{item.public ? 'Public' : 'Private'}</Badge>}
+              title={`${item.method.toUpperCase()} - ${item.public ? '/api' : '/papi'}${item.url}`}
+              description={item.description || ''}
+            />
+            <AccordionContent>
+              <ApiRequestBox
+                method={item.method}
+                baseUrl={baseUrl}
+                requestUrl={(item.public ? '/api' : '/papi') + item.url}
+                requestParams={item.params}
+                isPublic={item.public}
+                showQuery={item.query}
               />
-              <AccordionContent>
-                <ApiRequestBox
-                  method={item.method}
-                  baseUrl={baseUrl}
-                  requestUrl={(item.public ? '/api' : '/papi') + item.url}
-                  requestParams={item.params}
-                  isPublic={item.public}
-                  showQuery={item.query}
-                />
-              </AccordionContent>
-            </Accordion>
-          )
-        })
-      }
+            </AccordionContent>
+          </Accordion>
+        )
+      })}
       <Box paddingBottom={8} paddingTop={8}>
         <Typography variant='alpha'>{`${tableName.toUpperCase()} - Developer routes`}</Typography>
       </Box>
