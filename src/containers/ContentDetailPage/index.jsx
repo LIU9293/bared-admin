@@ -10,6 +10,7 @@ import { Textarea } from '@strapi/design-system/Textarea'
 import { Button } from '@strapi/design-system/Button'
 import { NumberInput } from '@strapi/design-system/NumberInput'
 import CardSelect from '@components/CardSelect'
+import Avatar from '@components/Avatar'
 import { callDapi, setCallDapiStatus } from '@store/api/reducer'
 
 export default function ContentDetail () {
@@ -73,6 +74,7 @@ export default function ContentDetail () {
     navigate(-1)
   }
 
+  const allColumns = Object.keys(attributes).concat(['created_at', 'updated_at'])
   return (
     <Box padding={8} style={{ width: '100%' }}>
       <Box paddingBottom={4}>
@@ -80,8 +82,8 @@ export default function ContentDetail () {
         </Typography>
       </Box>
       {
-        Object.keys(attributes).map(attr => {
-          const config = attributes[attr]
+        allColumns.map(attr => {
+          const config = attributes[attr] || { type: 'string' }
           const data = contentDetail.data[attr]
           return (
             <Box paddingBottom={4} key={attr}>
@@ -153,6 +155,12 @@ export default function ContentDetail () {
                     )
                   })}
                 </Flex>}
+              {
+                config.tableConfig?.showAsAvatar &&
+                  <Box paddingTop={4}>
+                    <Avatar src={data} />
+                  </Box>
+              }
             </Box>
           )
         })

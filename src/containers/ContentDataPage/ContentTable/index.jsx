@@ -6,8 +6,8 @@ import { VisuallyHidden } from '@strapi/design-system/VisuallyHidden'
 import { IconButtonGroup, IconButton } from '@strapi/design-system/IconButton'
 import { Box } from '@strapi/design-system/Box'
 import { Flex } from '@strapi/design-system/Flex'
-import { Button } from '@strapi/design-system/Button'
-import { Select, Option } from '@strapi/design-system/Select'
+// import { Button } from '@strapi/design-system/Button'
+// import { Select, Option } from '@strapi/design-system/Select'
 import { Table, TFooter, Thead, Tbody, Tr, Td, Th } from '@strapi/design-system/Table'
 import { Typography } from '@strapi/design-system/Typography'
 import Plus from '@strapi/icons/Plus'
@@ -15,25 +15,25 @@ import Pencil from '@strapi/icons/Pencil'
 import Trash from '@strapi/icons/Trash'
 import CarretDown from '@strapi/icons/CarretDown'
 import CarretUp from '@strapi/icons/CarretUp'
-import Filter from '@strapi/icons/Filter'
+// import Filter from '@strapi/icons/Filter'
 import ConfirmModal from '@components/ConfirmModal'
 import { NextLink, Pagination, PreviousLink } from '@strapi/design-system/Pagination'
+import Avatar from '@components/Avatar'
 
 const pageSize = 20
-
-const FilterOperations = [
-  'is',
-  'is not',
-  'is lower than',
-  'is lower than or equal',
-  'is bigger than',
-  'is bigger than or equal'
-]
+// const FilterOperations = [
+//   'is',
+//   'is not',
+//   'is lower than',
+//   'is lower than or equal',
+//   'is bigger than',
+//   'is bigger than or equal'
+// ]
 
 export default function ContentTable () {
   const { tableName, page = 1 } = useParams()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
-  const [filterAreaOpen, setFilterAreaOpen] = useState(false)
+  // const [filterAreaOpen, setFilterAreaOpen] = useState(false)
   const [deleteItem, setDeleteItem] = useState({})
   const [sortKey, setSortKey] = useState('id')
   const [sortDirection, setSortDirection] = useState('desc')
@@ -49,13 +49,13 @@ export default function ContentTable () {
 
   const attributes = useSelector(state => state.content.schemas.find(i => i.tableName === tableName)?.attributes) || {}
 
-  const onFilterColumnChange = e => {
-    console.log(e)
-  }
+  // const onFilterColumnChange = e => {
+  //   console.log(e)
+  // }
 
-  const onFilterTypeChange = e => {
-    console.log(e)
-  }
+  // const onFilterTypeChange = e => {
+  //   console.log(e)
+  // }
 
   useEffect(() => {
     setSortKey('id')
@@ -109,35 +109,13 @@ export default function ContentTable () {
 
   const isFirstPage = parseInt(page) === 1
   const isLastPage = parseInt(page) === Math.ceil(count / pageSize)
+  const allColumns = ['id'].concat(Object.keys(attributes)).concat(['created_at'])
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{tableName}</Typography>
       <Box paddingBottom={4}>
         <Typography variant='epsilon'>{`${count} items found.`}</Typography>
       </Box>
-      {/* {
-        filterAreaOpen && (
-          <Flex>
-            <Select onChange={onFilterColumnChange}>
-              {['id'].concat(Object.keys(attributes)).map(attr => {
-                return (
-                  <Option value={attr} key={attr}>{attr}</Option>
-                )
-              })}
-            </Select>
-            <Select onChange={onFilterTypeChange}>
-              {FilterOperations.map(attr => {
-                return (
-                  <Option value={attr} key={attr}>{attr}</Option>
-                )
-              })}
-            </Select>
-          </Flex>
-        )
-      } */}
-      {/* <Box paddingBottom={4}>
-        <Button startIcon={<Filter />} onClick={() => setFilterAreaOpen(!filterAreaOpen)}>Add Filter</Button>
-      </Box> */}
       <Table
         colCount={6}
         rowCount={10}
@@ -149,12 +127,13 @@ export default function ContentTable () {
       >
         <Thead>
           <Tr>
-            {['id'].concat(Object.keys(attributes)).map(attr => {
+            {allColumns.map(attr => {
               return (
                 <Th
                   key={attr}
                   action={<IconButton icon={sortKey === attr ? (sortDirection === 'desc' ? <CarretDown /> : <CarretUp />) : <div />} noBorder />}
                   onClick={() => onSortClick(attr)}
+                  className='pointer'
                 >
                   <Typography variant='sigma'>{attr}</Typography>
                 </Th>
@@ -170,20 +149,28 @@ export default function ContentTable () {
                 return (
                   <Tr key={item.id}>
                     {
-                      ['id'].concat(Object.keys(attributes)).map(attr => {
+                      allColumns.map(attr => {
+                        const attrSetting = attributes[attr]
                         let cell = item[attr]
                         if (typeof cell === 'object') {
-                          cell = JSON.stringify(cell).slice(0, 10)
+                          cell = JSON.stringify(cell).slice(0, 10) + '...'
                         }
 
                         if (typeof cell === 'undefined') {
                           cell = ''
                         }
 
-                        if (typeof cell === 'string' && cell.length > 16) {
-                          cell = cell.slice(0, 16)
+                        if (attrSetting?.tableConfig?.showAsAvatar && cell) {
+                          return (
+                            <Td key={attr} onClick={() => onRowClick(item)} className='pointer'>
+                              <Avatar src={cell} alt='table-avatar' />
+                            </Td>
+                          )
                         }
 
+                        if (typeof cell === 'string' && cell.length > 16) {
+                          cell = cell.slice(0, 16) + '...'
+                        }
                         return (
                           <Td key={attr} onClick={() => onRowClick(item)} className='pointer'>
                             {cell}
