@@ -7,7 +7,6 @@ import { IconButtonGroup, IconButton } from '@strapi/design-system/IconButton'
 import { Box } from '@strapi/design-system/Box'
 import { Flex } from '@strapi/design-system/Flex'
 // import { Button } from '@strapi/design-system/Button'
-// import { Select, Option } from '@strapi/design-system/Select'
 import { Table, TFooter, Thead, Tbody, Tr, Td, Th } from '@strapi/design-system/Table'
 import { Typography } from '@strapi/design-system/Typography'
 import Plus from '@strapi/icons/Plus'
@@ -19,6 +18,7 @@ import CarretUp from '@strapi/icons/CarretUp'
 import ConfirmModal from '@components/ConfirmModal'
 import { NextLink, Pagination, PreviousLink } from '@strapi/design-system/Pagination'
 import Avatar from '@components/Avatar'
+import { Select, Option } from '@strapi/design-system/Select'
 
 const pageSize = 20
 // const FilterOperations = [
@@ -38,6 +38,9 @@ export default function ContentTable ({ table }) {
   const [sortKey, setSortKey] = useState('id')
   const [sortDirection, setSortDirection] = useState('desc')
 
+  const [visibleColumns, setVisibleColumns] = useState([])
+  const [allColumns, setAllColumns] = useState([])
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -47,7 +50,60 @@ export default function ContentTable ({ table }) {
     return { data: [] }
   })
 
-  const attributes = useSelector(state => state.content.schemas.find(i => i.tableName === tableName)?.attributes) || {}
+  const attributes = useSelector(state =>
+    state.content.schemas
+      .find(i => i.tableName === tableName)?.attributes
+  ) || {}
+
+  const onSetColumns = cols => {
+    if (cols.length === 0) {
+      return
+    }
+
+    setVisibleColumns(cols)
+    try {
+      let tableConfig = window.localStorage.getItem('bared-admin-table-config')
+      if (tableConfig) {
+        tableConfig = JSON.parse(tableConfig)
+        tableConfig[tableName] = cols
+        window.localStorage.setItem('bared-admin-table-config', JSON.stringify(tableConfig))
+      } else {
+        window.localStorage.setItem('bared-admin-table-config', JSON.stringify({
+          [tableName]: cols
+        }))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const setColumnToDefault = () => {
+    const all = ['id', 'created_at']
+    let visible = ['id', 'created_at']
+
+    const tableConfig = window.localStorage.getItem('bared-admin-table-config')
+    if (tableConfig && JSON.parse(tableConfig)[tableName]) {
+      visible = JSON.parse(tableConfig)[tableName]
+    } else {
+      for (const i in attributes) {
+        all.push(i)
+        if (attributes[i].tableConfig?.defaultShow) {
+          visible.push(i)
+        }
+      }
+    }
+
+    for (const i in attributes) {
+      all.push(i)
+    }
+
+    setVisibleColumns(visible)
+    setAllColumns(all)
+  }
+
+  useEffect(() => {
+    setColumnToDefault()
+  }, [attributes, tableName])
 
   // const onFilterColumnChange = e => {
   //   console.log(e)
@@ -106,16 +162,29 @@ export default function ContentTable ({ table }) {
   }
 
   const { data, count } = tableData
-
   const isFirstPage = parseInt(page) === 1
   const isLastPage = parseInt(page) === Math.ceil(count / pageSize)
-  const allColumns = ['id'].concat(Object.keys(attributes)).concat(['created_at'])
+
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{tableName}</Typography>
       <Box paddingBottom={4}>
         <Typography variant='epsilon'>{`${count} items found.`}</Typography>
       </Box>
+
+      <Box paddingBottom={4}>
+        <Select
+          label='Columns'
+          placeholder='Choose columns to show'
+          value={visibleColumns}
+          onChange={onSetColumns}
+          multi
+          withTags
+        >
+          {allColumns.map(item => <Option key={item} value={item}>{item}</Option>)}
+        </Select>
+      </Box>
+
       <Table
         colCount={6}
         rowCount={10}
@@ -127,7 +196,7 @@ export default function ContentTable ({ table }) {
       >
         <Thead>
           <Tr>
-            {allColumns.map(attr => {
+            {visibleColumns.map(attr => {
               return (
                 <Th
                   key={attr}
@@ -149,7 +218,7 @@ export default function ContentTable ({ table }) {
                 return (
                   <Tr key={item.id}>
                     {
-                      allColumns.map(attr => {
+                      visibleColumns.map(attr => {
                         const attrSetting = attributes[attr]
                         let cell = item[attr]
                         if (cell && typeof cell === 'object') {

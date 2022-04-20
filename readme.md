@@ -20,7 +20,7 @@
   * [x] Sort
   * [ ] Filter
   * [ ] Search
-* [ ] Store column preference for each admin user somewhere
+* [x] Store column preference for each admin user somewhere
 * [ ] Errors page to read errors from server
 * [ ] Homepage to show some keyfigures (DAU, MAU, requests...)
 
