@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import { getDetail } from '@store/content/reducer'
 import { Typography } from '@strapi/design-system/Typography'
 import { Box } from '@strapi/design-system/Box'
@@ -31,13 +31,8 @@ export default function ContentDetail () {
     if (!isAdd) {
       dispatch(getDetail({ tableName, id }))
     }
-  }, [])
-
-  useEffect(() => {
-    if (id === 'add') {
-      setInputData({})
-    }
-  }, [id])
+    setInputData({})
+  }, [id, tableName])
 
   useEffect(() => {
     if (callDapiStatus) {
@@ -84,7 +79,7 @@ export default function ContentDetail () {
       {
         allColumns.map(attr => {
           const config = attributes[attr] || { type: 'string' }
-          const data = contentDetail.data[attr]
+          const data = contentDetail.data[attr]        
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&
@@ -96,9 +91,12 @@ export default function ContentDetail () {
                 />}
               {config.type === 'integer' &&
                 <NumberInput
+                  id={attr}
                   name={attr}
                   label={attr}
-                  value={parseInt(inputData[attr]) || data || undefined}
+                  value={typeof inputData[attr] === 'undefined'
+                    ? data
+                    : (inputData[attr] || 0)}
                   onValueChange={e => onValueChange(e, attr)}
                 />}
               {config.type === 'boolean' &&
@@ -128,7 +126,6 @@ export default function ContentDetail () {
                 <Textarea
                   label={attr}
                   name={attr}
-                  defaultValue={JSON.stringify(data)}
                   onChange={e => {
                     onValueChange(e.target.value, attr)
                   }}
@@ -159,6 +156,14 @@ export default function ContentDetail () {
                 config.tableConfig?.showAsAvatar &&
                   <Box paddingTop={4}>
                     <Avatar src={data} />
+                  </Box>
+              }
+              {
+                config.join && config.join.table && data &&
+                  <Box paddingTop={4}>
+                    <Link to={`/content-detail/${config.join.table}/${data}`}>
+                      {`${config.join.table} - ${data}`}
+                    </Link>
                   </Box>
               }
             </Box>
