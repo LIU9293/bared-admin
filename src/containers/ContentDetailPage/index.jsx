@@ -11,6 +11,8 @@ import { Button } from '@strapi/design-system/Button'
 import { NumberInput } from '@strapi/design-system/NumberInput'
 import CardSelect from '@components/CardSelect'
 import Avatar from '@components/Avatar'
+import ConfirmModal from '@components/ConfirmModal'
+import { deleteTableItem } from '@store/content/reducer'
 import { callDapi, setCallDapiStatus } from '@store/api/reducer'
 
 export default function ContentDetail () {
@@ -25,7 +27,15 @@ export default function ContentDetail () {
   const attributes = useSelector(state => state.content.schemas.find(i => i.tableName === tableName)?.attributes) || {}
 
   const [inputData, setInputData] = useState({})
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const callDapiStatus = useSelector(state => state.api.callDapiStatus)
+
+  const onDeleteItem = () => {
+    if (isAdd) return
+    dispatch(deleteTableItem({ tableName, id }))
+    setConfirmModalOpen(false)
+    navigate(-1)
+  }
 
   useEffect(() => {
     if (!isAdd) {
@@ -171,7 +181,8 @@ export default function ContentDetail () {
         })
       }
       <Box paddingTop={4}>
-        <Flex>
+        <Flex justifyContent='space-between'>
+          <Flex>
           <Button onClick={isAdd ? onAdd : onUpdate}>{isAdd ? 'Add Item' : 'Update Item'}</Button>
           <Button
             variant='tertiary'
@@ -180,8 +191,24 @@ export default function ContentDetail () {
           >
             Cancel
           </Button>
+          </Flex>
+          {!isAdd && (
+            <Flex>
+              <Button variant='danger' onClick={() => { setConfirmModalOpen(true) }}>
+                Delete
+              </Button>
+            </Flex>
+          )}
         </Flex>
       </Box>
+      <ConfirmModal
+        confirmText='Delete'
+        title={'Delete Content'}
+        show={confirmModalOpen}
+        hideCancel={false}
+        onCancel={() => setConfirmModalOpen(false)}
+        onConfirm={onDeleteItem}
+      />
     </Box>
   )
 }

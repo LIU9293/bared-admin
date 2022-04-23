@@ -167,7 +167,7 @@ export default function ContentTable ({ table }) {
 
   return (
     <Box padding={8} background='neutral100'>
-      <Typography variant='alpha'>{tableName}</Typography>
+      <Typography variant='alpha'>{tableName.toUpperCase()}</Typography>
       <Box paddingBottom={4}>
         <Typography variant='epsilon'>{`${count} items found.`}</Typography>
       </Box>

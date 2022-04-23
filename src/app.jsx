@@ -5,6 +5,7 @@ import ContentDataPage from '@containers/ContentDataPage'
 import ContentApiPage from '@containers/ContentApiPage'
 import ContentDetailPage from '@containers/ContentDetailPage'
 import ErrorsPage from '@containers/ErrorsPage'
+import ErrorDetailPage from '@containers/ErrorsPage/ErrorDetailPage'
 import LoginPage from '@containers/LoginPage'
 import MainLayout from '@containers/MainLayout'
 import { getProfile } from '@store/auth/reducer'
@@ -43,6 +44,7 @@ export default function App () {
         <Route path='content' element={<ContentDataPage />} />
         <Route path='content/:tableName' element={<ContentDataPage />} />
         <Route path='content/:tableName/:page' element={<ContentDataPage />} />
+        <Route path='content-detail/error/:id' element={<ErrorDetailPage />} />
         <Route path='content-detail/:tableName/:id' element={<ContentDetailPage />} />
         <Route path='content-api' element={<ContentApiPage />} />
         <Route path='content-api/:tableName' element={<ContentApiPage />} />
