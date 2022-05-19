@@ -78,7 +78,6 @@ export default function ContentTable ({ table }) {
   }
 
   const setColumnToDefault = () => {
-    const all = ['id', 'created_at']
     let visible = ['id', 'created_at']
 
     const tableConfig = window.localStorage.getItem('bared-admin-table-config')
@@ -86,19 +85,14 @@ export default function ContentTable ({ table }) {
       visible = JSON.parse(tableConfig)[tableName]
     } else {
       for (const i in attributes) {
-        all.push(i)
         if (attributes[i].tableConfig?.defaultShow) {
           visible.push(i)
         }
       }
     }
 
-    for (const i in attributes) {
-      all.push(i)
-    }
-
     setVisibleColumns(visible)
-    setAllColumns(all)
+    setAllColumns(['id', 'created_at'].concat(Object.keys(attributes)))
   }
 
   useEffect(() => {
@@ -181,7 +175,7 @@ export default function ContentTable ({ table }) {
           multi
           withTags
         >
-          {allColumns.map(item => <Option key={item} value={item}>{item}</Option>)}
+          {allColumns.map(item => <Option key={table + '_' + item} value={item}>{item}</Option>)}
         </Select>
       </Box>
 
