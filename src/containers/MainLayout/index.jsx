@@ -31,10 +31,10 @@ export default function MainLayout () {
         <NavSections>
           <NavSection label='Contents'>
             <NavLink to='/content' icon={<Layer />}>
-              Content
+              数据视图
             </NavLink>
             <NavLink to='/content-api' icon={<Puzzle />}>
-              Content API
+              API列表
             </NavLink>
             <NavLink to='/errors' icon={<FileError />}>
               Errors

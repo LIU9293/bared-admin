@@ -8,7 +8,7 @@ import {
   SubNavLink
 } from '@strapi/design-system/SubNav'
 import styled from 'styled-components'
-import ContentTable from './ContentTable'
+import ContentService from './ContentService'
 
 const ContentPageContainer = styled.div`
   display: flex;
@@ -20,12 +20,9 @@ const ContentPageContent = styled.div`
   display: flex;
   flex-direction: column;
   flex: 1;
-
-  max-height: 100vh;
-  overflow-y: auto;
 `
 
-export default function ContentDataPage () {
+export default function ContentServicePage () {
   const { tableName } = useParams()
   const schemas = useSelector(state => state.content.schemas)
   return (
@@ -33,26 +30,26 @@ export default function ContentDataPage () {
       <SubNav ariaLabel='Builder sub nav'>
         <SubNavHeader label='View Contents' />
         <SubNavSections>
-          <SubNavSection label='应用数据表'>
+          <SubNavSection label='Application API'>
             {schemas
               .filter(i => !i.hideInAdmin)
               .filter(i => !i.isPluginSchema)
               .map(schema =>
                 <SubNavLink
-                  to={`/content/${schema.tableName}`}
+                  to={`/content-api/${schema.tableName}`}
                   key={schema.tableName}
                 >
                   {schema.displayName || schema.tableName}
                 </SubNavLink>
               )}
           </SubNavSection>
-          <SubNavSection label='Plugin数据表'>
+          <SubNavSection label='Plugin API'>
             {schemas
               .filter(i => !i.hideInAdmin)
               .filter(i => i.isPluginSchema)
               .map(schema =>
                 <SubNavLink
-                  to={`/content/${schema.tableName}`}
+                  to={`/content-serivce/${schema.tableName}`}
                   key={schema.tableName}
                 >
                   {schema.displayName || schema.tableName}
@@ -62,7 +59,7 @@ export default function ContentDataPage () {
         </SubNavSections>
       </SubNav>
       <ContentPageContent>
-        {tableName && <ContentTable />}
+        {tableName && <ContentService />}
       </ContentPageContent>
     </ContentPageContainer>
   )

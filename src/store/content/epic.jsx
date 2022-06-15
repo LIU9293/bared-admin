@@ -8,6 +8,7 @@ import {
   deleteTableItem,
   createTableItem,
   updateTableItem,
+  getService,
   getApi,
   getSchemas,
   setSchemas,
@@ -88,6 +89,25 @@ export const getSchemaEpic = (action$, state$) => action$.pipe(
 
 export const getApiEpic = (action$, state$) => action$.pipe(
   ofType(getApi().type),
+  withLatestFrom(state$),
+  switchMap(([action, state]) => {
+    if (!state.auth.jwt) {
+      return of(login({ onLogin: action }))
+    }
+
+    return from(api.getApi(action.payload, state.auth.jwt)).pipe(
+      switchMap((response) => {
+        return of(setApi({
+          tableName: action.payload.tableName,
+          api: response
+        }))
+      })
+    )
+  })
+)
+
+export const getSerivceEpic = (action$, state$) => action$.pipe(
+  ofType(getService().type),
   withLatestFrom(state$),
   switchMap(([action, state]) => {
     if (!state.auth.jwt) {

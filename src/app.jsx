@@ -48,6 +48,8 @@ export default function App () {
         <Route path='content-detail/:tableName/:id' element={<ContentDetailPage />} />
         <Route path='content-api' element={<ContentApiPage />} />
         <Route path='content-api/:tableName' element={<ContentApiPage />} />
+        {/* <Route path='content-service' element={<ContentApiPage />} />
+        <Route path='content-service/:tableName' element={<ContentApiPage />} /> */}
         <Route path='errors' element={<ErrorsPage />} />
       </Route>
     </Routes>

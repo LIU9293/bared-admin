@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   schemas: [],
   tableData: {},
   api: {},
+  service: {},
   contentDetail: {
     loading: false,
     error: null,
@@ -38,10 +39,19 @@ export const getApi = createAction('get_api')
 export const setApi = createAction('set_api')
 export const callApi = createAction('call_api')
 
+export const getService = createAction('get_service')
+export const setService = createAction('set_service')
+export const callService = createAction('call_service')
+
 const contentReducer = createReducer({
   [getDetail]: (state, payload) => ({
     ...state,
     contentDetail: { loading: true, error: null, data: {} }
+  }),
+
+  [setService]: (state, payload) => ({
+    ...state,
+    service: { ...state.service, [payload.tableName]: payload.service }
   }),
 
   [setDetail]: (state, payload) => ({

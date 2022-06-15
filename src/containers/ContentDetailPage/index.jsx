@@ -79,7 +79,7 @@ export default function ContentDetail () {
     navigate(-1)
   }
 
-  const allColumns = Object.keys(attributes).concat(['created_at', 'updated_at'])
+  const allColumns = Object.keys(attributes).concat(isAdd ? [] : ['created_at', 'updated_at'])
   return (
     <Box padding={8} style={{ width: '100%' }}>
       <Box paddingBottom={4}>
@@ -130,7 +130,6 @@ export default function ContentDetail () {
                       onClick={() => onValueChange(false, attr)}
                     />
                   </Flex>
-
                 </Flex>}
               {(config.type === 'json' || config.type === 'text') &&
                 <Textarea

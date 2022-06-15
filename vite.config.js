@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 const path = require('path')
 
 export default defineConfig({
+  server: { port: 8080 },
   plugins: [react()],
   resolve: {
     alias: {

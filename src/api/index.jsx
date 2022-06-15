@@ -146,6 +146,16 @@ const api = {
     })
   },
 
+  getService: async (payload, jwt) => {
+    const { tableName } = payload
+    return await request({
+      method: 'get',
+      url: `/dapi/service/${tableName}`,
+      needToken: true,
+      jwt
+    })
+  },
+
   getApi: async (payload, jwt) => {
     const { tableName } = payload
     return await request({

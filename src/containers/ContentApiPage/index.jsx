@@ -30,15 +30,31 @@ export default function ContentApiPage () {
       <SubNav ariaLabel='Builder sub nav'>
         <SubNavHeader label='View Contents' />
         <SubNavSections>
-          <SubNavSection label='Data'>
-            {schemas.filter(i => !i.hideInAdmin).map(schema =>
-              <SubNavLink
-                to={`/content-api/${schema.tableName}`}
-                key={schema.tableName}
-              >
-                {schema.displayName || schema.tableName}
-              </SubNavLink>
-            )}
+          <SubNavSection label='Application API'>
+            {schemas
+              .filter(i => !i.hideInAdmin)
+              .filter(i => !i.isPluginSchema)
+              .map(schema =>
+                <SubNavLink
+                  to={`/content-api/${schema.tableName}`}
+                  key={schema.tableName}
+                >
+                  {schema.displayName || schema.tableName}
+                </SubNavLink>
+              )}
+          </SubNavSection>
+          <SubNavSection label='Plugin API'>
+            {schemas
+              .filter(i => !i.hideInAdmin)
+              .filter(i => i.isPluginSchema)
+              .map(schema =>
+                <SubNavLink
+                  to={`/content-api/${schema.tableName}`}
+                  key={schema.tableName}
+                >
+                  {schema.displayName || schema.tableName}
+                </SubNavLink>
+              )}
           </SubNavSection>
         </SubNavSections>
       </SubNav>
