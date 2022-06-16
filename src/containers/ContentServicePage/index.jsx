@@ -1,4 +1,5 @@
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import {
   SubNav,
@@ -8,7 +9,8 @@ import {
   SubNavLink
 } from '@strapi/design-system/SubNav'
 import styled from 'styled-components'
-import ContentService from './ContentService'
+import { getService } from '@store/content/reducer'
+import ServiceDetail from './ServiceDetail'
 
 const ContentPageContainer = styled.div`
   display: flex;
@@ -23,43 +25,34 @@ const ContentPageContent = styled.div`
 `
 
 export default function ContentServicePage () {
-  const { tableName } = useParams()
-  const schemas = useSelector(state => state.content.schemas)
+  const { serviceName } = useParams()
+  const services = useSelector(state => state.content.services)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(getService())
+  }, [])
+
   return (
     <ContentPageContainer>
       <SubNav ariaLabel='Builder sub nav'>
-        <SubNavHeader label='View Contents' />
+        <SubNavHeader label='View Services' />
         <SubNavSections>
-          <SubNavSection label='Application API'>
-            {schemas
-              .filter(i => !i.hideInAdmin)
-              .filter(i => !i.isPluginSchema)
-              .map(schema =>
+          <SubNavSection label='Plugin Services'>
+            {services
+              .map(service =>
                 <SubNavLink
-                  to={`/content-api/${schema.tableName}`}
-                  key={schema.tableName}
+                  to={`/content-service/${service.name}`}
+                  key={service.name}
                 >
-                  {schema.displayName || schema.tableName}
-                </SubNavLink>
-              )}
-          </SubNavSection>
-          <SubNavSection label='Plugin API'>
-            {schemas
-              .filter(i => !i.hideInAdmin)
-              .filter(i => i.isPluginSchema)
-              .map(schema =>
-                <SubNavLink
-                  to={`/content-serivce/${schema.tableName}`}
-                  key={schema.tableName}
-                >
-                  {schema.displayName || schema.tableName}
+                  {service.name}
                 </SubNavLink>
               )}
           </SubNavSection>
         </SubNavSections>
       </SubNav>
       <ContentPageContent>
-        {tableName && <ContentService />}
+        {serviceName && <ServiceDetail />}
       </ContentPageContent>
     </ContentPageContainer>
   )

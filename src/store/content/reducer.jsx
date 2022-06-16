@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   schemas: [],
   tableData: {},
   api: {},
-  service: {},
+  services: [],
   contentDetail: {
     loading: false,
     error: null,
@@ -51,7 +51,7 @@ const contentReducer = createReducer({
 
   [setService]: (state, payload) => ({
     ...state,
-    service: { ...state.service, [payload.tableName]: payload.service }
+    services: payload.services
   }),
 
   [setDetail]: (state, payload) => ({

@@ -3,7 +3,7 @@ import fetch from 'unfetch'
 export const request = async ({
   method,
   url,
-  needToken,
+  needToken = false,
   payload,
   jwt
 }) => {
@@ -147,10 +147,9 @@ const api = {
   },
 
   getService: async (payload, jwt) => {
-    const { tableName } = payload
     return await request({
       method: 'get',
-      url: `/dapi/service/${tableName}`,
+      url: '/dapi/service/all',
       needToken: true,
       jwt
     })

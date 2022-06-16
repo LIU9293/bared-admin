@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import ContentDataPage from '@containers/ContentDataPage'
 import ContentApiPage from '@containers/ContentApiPage'
+import ContentServicePage from '@containers/ContentServicePage'
 import ContentDetailPage from '@containers/ContentDetailPage'
 import ErrorsPage from '@containers/ErrorsPage'
 import ErrorDetailPage from '@containers/ErrorsPage/ErrorDetailPage'
@@ -48,8 +49,8 @@ export default function App () {
         <Route path='content-detail/:tableName/:id' element={<ContentDetailPage />} />
         <Route path='content-api' element={<ContentApiPage />} />
         <Route path='content-api/:tableName' element={<ContentApiPage />} />
-        {/* <Route path='content-service' element={<ContentApiPage />} />
-        <Route path='content-service/:tableName' element={<ContentApiPage />} /> */}
+        <Route path='content-service' element={<ContentServicePage />} />
+        <Route path='content-service/:serviceName' element={<ContentServicePage />} />
         <Route path='errors' element={<ErrorsPage />} />
       </Route>
     </Routes>

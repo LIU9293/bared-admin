@@ -10,7 +10,6 @@ import ApiRequestBox from '@components/ApiRequestBox'
 
 const deveoperApi = (tableName, schemas) => {
   const attributes = schemas.find(i => i.tableName === tableName)?.attributes || {}
-  console.log(attributes)
   return [
     {
       url: `/dapi/${tableName}/:id`,

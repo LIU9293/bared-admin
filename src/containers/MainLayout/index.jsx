@@ -36,6 +36,9 @@ export default function MainLayout () {
             <NavLink to='/content-api' icon={<Puzzle />}>
               API列表
             </NavLink>
+            <NavLink to='/content-service' icon={<Puzzle />}>
+              Service列表
+            </NavLink>
             <NavLink to='/errors' icon={<FileError />}>
               Errors
             </NavLink>

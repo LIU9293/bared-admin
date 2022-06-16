@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { getDetail } from '@store/content/reducer'
 import { Typography } from '@strapi/design-system/Typography'
 import { Box } from '@strapi/design-system/Box'
 import { Flex } from '@strapi/design-system/Flex'
@@ -12,7 +11,7 @@ import { NumberInput } from '@strapi/design-system/NumberInput'
 import CardSelect from '@components/CardSelect'
 import Avatar from '@components/Avatar'
 import ConfirmModal from '@components/ConfirmModal'
-import { deleteTableItem } from '@store/content/reducer'
+import { deleteTableItem, getDetail } from '@store/content/reducer'
 import { callDapi, setCallDapiStatus } from '@store/api/reducer'
 
 export default function ContentDetail () {
@@ -89,7 +88,7 @@ export default function ContentDetail () {
       {
         allColumns.map(attr => {
           const config = attributes[attr] || { type: 'string' }
-          const data = contentDetail.data[attr]        
+          const data = contentDetail.data[attr]
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&
@@ -182,14 +181,14 @@ export default function ContentDetail () {
       <Box paddingTop={4}>
         <Flex justifyContent='space-between'>
           <Flex>
-          <Button onClick={isAdd ? onAdd : onUpdate}>{isAdd ? 'Add Item' : 'Update Item'}</Button>
-          <Button
-            variant='tertiary'
-            style={{ marginLeft: 12 }}
-            onClick={onCancel}
-          >
-            Cancel
-          </Button>
+            <Button onClick={isAdd ? onAdd : onUpdate}>{isAdd ? 'Add Item' : 'Update Item'}</Button>
+            <Button
+              variant='tertiary'
+              style={{ marginLeft: 12 }}
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
           </Flex>
           {!isAdd && (
             <Flex>
@@ -202,7 +201,7 @@ export default function ContentDetail () {
       </Box>
       <ConfirmModal
         confirmText='Delete'
-        title={'Delete Content'}
+        title='Delete Content'
         show={confirmModalOpen}
         hideCancel={false}
         onCancel={() => setConfirmModalOpen(false)}

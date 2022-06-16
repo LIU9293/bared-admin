@@ -16,7 +16,8 @@ import {
   setTableData,
   setApi,
   getDetail,
-  setDetail
+  setDetail,
+  setService
 } from './reducer'
 
 export const getDetailEpic = (action$, state$) => action$.pipe(
@@ -114,11 +115,12 @@ export const getSerivceEpic = (action$, state$) => action$.pipe(
       return of(login({ onLogin: action }))
     }
 
-    return from(api.getApi(action.payload, state.auth.jwt)).pipe(
+    return from(api.getService(action.payload, state.auth.jwt)).pipe(
       switchMap((response) => {
-        return of(setApi({
-          tableName: action.payload.tableName,
-          api: response
+        console.log(response)
+
+        return of(setService({
+          services: response
         }))
       })
     )
