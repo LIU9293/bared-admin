@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Box } from '@strapi/design-system/Box'
@@ -17,12 +17,15 @@ export default function ServiceDetail () {
   const { serviceName } = useParams()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [inputData, setInputData] = useState({})
-  const [isResponseError, setResponseError] = useState(false)
-  const [responseModalOpen, setResponseModalOpen] = useState(false)
+  // const [isResponseError, setResponseError] = useState(false)
   const [responseContent, setResponseContent] = useState({})
   const jwt = useSelector(state => state.auth.jwt)
 
   const serviceDetail = useSelector(state => state.content.services.find(i => i.name.toLowerCase() === serviceName.toLowerCase())) || {}
+
+  useEffect(() => {
+    setResponseContent({})
+  }, [serviceName])
 
   const onValueChange = (e, attr) => {
     setInputData({
@@ -46,14 +49,12 @@ export default function ServiceDetail () {
       payload: inputData
     })
       .then(response => {
-        setResponseModalOpen(true)
         setResponseContent(response)
-
-        if (!response.success) {
-          setResponseError(true)
-        } else {
-          setResponseError(false)
-        }
+        // if (!response.success) {
+        //   setResponseError(true)
+        // } else {
+        //   setResponseError(false)
+        // }
       })
       .catch(err => {
         console.log(err)
@@ -64,7 +65,7 @@ export default function ServiceDetail () {
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{`${serviceName}`}</Typography>
-      <Box paddingTop={8} paddingBottom={8}>
+      <Box paddingTop={8} paddingBottom={2}>
         {
         Object.keys(params).map(attr => {
           const config = params[attr] || 'string'
@@ -117,9 +118,16 @@ export default function ServiceDetail () {
         })
       }
       </Box>
-      <Flex paddingTop={4}>
+      <Flex>
         <Button onClick={handleRequestButtonClick}>Request</Button>
       </Flex>
+      {
+        responseContent && JSON.stringify(responseContent) !== '{}' &&
+        <Box paddingTop={8}>
+          <Typography variant='delta'>Service Result</Typography>
+          <ReactJson src={responseContent} name={false} style={{ marginTop: 12 }} />
+        </Box>
+      }
       <ConfirmModal
         content={`Call ${serviceName} Service?`}
         title='Confirm'
@@ -127,17 +135,6 @@ export default function ServiceDetail () {
         hideCancel={false}
         onCancel={() => setConfirmModalOpen(false)}
         onConfirm={onRequestService}
-      />
-      <ConfirmModal
-        confirmText='Close'
-        title={isResponseError ? 'Request Error' : 'Request Succeed'}
-        show={responseModalOpen}
-        hideCancel
-        onCancel={() => setResponseModalOpen(false)}
-        onConfirm={() => setResponseModalOpen(false)}
-        ContentComponent={
-          <ReactJson src={responseContent} name={false} />
-        }
       />
     </Box>
   )
