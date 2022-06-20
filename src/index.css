@@ -45,3 +45,7 @@ code {
 .pointer {
   cursor: pointer;
 }
+
+.subnav {
+  width: 16rem !important;
+}

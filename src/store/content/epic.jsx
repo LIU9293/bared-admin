@@ -117,8 +117,6 @@ export const getSerivceEpic = (action$, state$) => action$.pipe(
 
     return from(api.getService(action.payload, state.auth.jwt)).pipe(
       switchMap((response) => {
-        console.log(response)
-
         return of(setService({
           services: response
         }))

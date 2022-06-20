@@ -11,6 +11,7 @@
     "@strapi/design-system": "1.1.0",
     "@strapi/icons": "1.1.0",
     "dayjs": "^1.11.1",
+    "ramda": "0.28.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-json-view": "1.21.3",

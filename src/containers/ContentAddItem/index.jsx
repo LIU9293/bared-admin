@@ -19,7 +19,6 @@ export default function ContentDetail () {
     dispatch(getDetail({ tableName, id }))
   }, [])
 
-  console.log(contentDetail.data, attributes)
   return (
     <Box padding={8} style={{ width: '100%' }}>
       <Box paddingBottom={4}>

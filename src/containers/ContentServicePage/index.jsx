@@ -10,6 +10,7 @@ import {
 } from '@strapi/design-system/SubNav'
 import styled from 'styled-components'
 import { getService } from '@store/content/reducer'
+import { groupBy } from 'ramda'
 import ServiceDetail from './ServiceDetail'
 
 const ContentPageContainer = styled.div`
@@ -33,23 +34,28 @@ export default function ContentServicePage () {
     dispatch(getService())
   }, [])
 
+  const grouiedPluginServices = groupBy(a => a.pluginName, services)
   return (
     <ContentPageContainer>
-      <SubNav ariaLabel='Builder sub nav'>
-        <SubNavHeader label='View Services' />
-        <SubNavSections>
-          <SubNavSection label='Plugin Services'>
-            {services
-              .map(service =>
-                <SubNavLink
-                  to={`/content-service/${service.name}`}
-                  key={service.name}
-                >
-                  {service.name}
-                </SubNavLink>
-              )}
-          </SubNavSection>
-        </SubNavSections>
+      <SubNav className='subnav' ariaLabel='sub-nav'>
+        <SubNavHeader label='Plugin Services' />
+        {Object.keys(grouiedPluginServices).map(key => {
+          return (
+            <SubNavSections key={key} style={{ marginBottom: -10 }}>
+              <SubNavSection label={key}>
+                {grouiedPluginServices[key]
+                  .map(service =>
+                    <SubNavLink
+                      to={`/content-service/${service.name}`}
+                      key={service.name}
+                    >
+                      {service.name}
+                    </SubNavLink>
+                  )}
+              </SubNavSection>
+            </SubNavSections>
+          )
+        })}
       </SubNav>
       <ContentPageContent>
         {serviceName && <ServiceDetail />}
