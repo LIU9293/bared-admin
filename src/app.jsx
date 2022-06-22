@@ -9,6 +9,7 @@ import ErrorsPage from '@containers/ErrorsPage'
 import ErrorDetailPage from '@containers/ErrorsPage/ErrorDetailPage'
 import LoginPage from '@containers/LoginPage'
 import MainLayout from '@containers/MainLayout'
+import UserPage from '@containers/UserPage'
 import { getProfile } from '@store/auth/reducer'
 
 function RequireAuth ({ children }) {
@@ -51,6 +52,7 @@ export default function App () {
         <Route path='content-api/:tableName' element={<ContentApiPage />} />
         <Route path='content-service' element={<ContentServicePage />} />
         <Route path='content-service/:serviceName' element={<ContentServicePage />} />
+        <Route path='user' element={<UserPage />} />
         <Route path='errors' element={<ErrorsPage />} />
       </Route>
     </Routes>

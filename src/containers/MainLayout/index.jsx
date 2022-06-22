@@ -1,7 +1,7 @@
 import BaredLogo from '@assets/img/2.png'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, Link } from 'react-router-dom'
 import { Divider } from '@strapi/design-system/Divider'
 import {
   MainNav,
@@ -14,6 +14,7 @@ import {
 } from '@strapi/design-system/MainNav'
 import Layer from '@strapi/icons/Layer'
 import Puzzle from '@strapi/icons/Puzzle'
+import Cup from '@strapi/icons/Cup'
 import FileError from '@strapi/icons/FileError'
 
 export default function MainLayout () {
@@ -23,7 +24,7 @@ export default function MainLayout () {
     <div className='app'>
       <MainNav condensed={condensed}>
         <NavBrand
-          workplace='Workplace'
+          workplace='Developer panel'
           title='Bared CMS'
           icon={<img src={BaredLogo} alt='' />}
         />
@@ -31,13 +32,13 @@ export default function MainLayout () {
         <NavSections>
           <NavSection label='Contents'>
             <NavLink to='/content' icon={<Layer />}>
-              数据视图
+              Data Tables
             </NavLink>
             <NavLink to='/content-api' icon={<Puzzle />}>
-              API列表
+              API Viewer
             </NavLink>
-            <NavLink to='/content-service' icon={<Puzzle />}>
-              Service列表
+            <NavLink to='/content-service' icon={<Cup />}>
+              Services
             </NavLink>
             <NavLink to='/errors' icon={<FileError />}>
               Errors
@@ -45,9 +46,11 @@ export default function MainLayout () {
           </NavSection>
         </NavSections>
         {user.name &&
-          <NavUser src={user.avatar} to='/'>
-            {user.name}
-          </NavUser>}
+          <Link to='/user'>
+            <NavUser src={user.avatar}>
+              {user.name}
+            </NavUser>
+          </Link>}
         <NavCondense onClick={() => setCondensed(s => !s)}>
           {condensed ? 'Expanded the navbar' : 'Collapse the navbar'}
         </NavCondense>
