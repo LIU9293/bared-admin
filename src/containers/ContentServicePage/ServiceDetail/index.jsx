@@ -40,7 +40,6 @@ export default function ServiceDetail () {
 
   const onRequestService = () => {
     setConfirmModalOpen(false)
-
     request({
       method: 'post',
       url: `/dapi/service/${serviceName.toLowerCase()}`,
@@ -50,11 +49,6 @@ export default function ServiceDetail () {
     })
       .then(response => {
         setResponseContent(response)
-        // if (!response.success) {
-        //   setResponseError(true)
-        // } else {
-        //   setResponseError(false)
-        // }
       })
       .catch(err => {
         console.log(err)

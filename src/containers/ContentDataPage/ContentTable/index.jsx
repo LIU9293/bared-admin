@@ -14,11 +14,15 @@ import Pencil from '@strapi/icons/Pencil'
 import Trash from '@strapi/icons/Trash'
 import CarretDown from '@strapi/icons/CarretDown'
 import CarretUp from '@strapi/icons/CarretUp'
+import Magic from '@strapi/icons/Magic'
+import { request } from '@api'
 // import Filter from '@strapi/icons/Filter'
 import ConfirmModal from '@components/ConfirmModal'
+import ServiceModal from '@components/ServiceModal'
 import { NextLink, Pagination, PreviousLink } from '@strapi/design-system/Pagination'
 import Avatar from '@components/Avatar'
 import { Select, Option } from '@strapi/design-system/Select'
+import ReactJson from 'react-json-view'
 
 const pageSize = 20
 // const FilterOperations = [
@@ -41,9 +45,14 @@ export default function ContentTable ({ table }) {
   const [visibleColumns, setVisibleColumns] = useState([])
   const [allColumns, setAllColumns] = useState([])
 
+  const [services, setSerivces] = useState([])
+  const [serviceModal, setServiceModal] = useState(false)
+  const [responseContent, setResponseContent] = useState({})
+  const [responseModal, setResponseModal] = useState(false)
+
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
+  const jwt = useSelector(state => state.auth.jwt)
   const tableData = useSelector(state => {
     const res = state.content.tableData[tableName]
     if (res && res.data) return res
@@ -54,6 +63,10 @@ export default function ContentTable ({ table }) {
     state.content.schemas
       .find(i => i.tableName === tableName)?.attributes
   ) || {}
+  const rowActions = useSelector(state =>
+    state.content.schemas
+      .find(i => i.tableName === tableName)?.rowActions
+  ) || []
 
   const onSetColumns = cols => {
     if (cols.length === 0) {
@@ -130,6 +143,44 @@ export default function ContentTable ({ table }) {
     setConfirmModalOpen(true)
   }
 
+  const openActionsControl = (rowActions, item) => {
+    const services = rowActions.map(action => {
+      const { paramsMap } = action
+      const allKeys = Object.keys(paramsMap) || []
+      action.params = {}
+      if (allKeys.length > 0) {
+        allKeys.forEach(key => {
+          action.params[key] = item[paramsMap[key]]
+        })
+      }
+      return action
+    })
+
+    setSerivces(services)
+    setServiceModal(true)
+  }
+
+  const onServiceCall = service => {
+    setServiceModal(false)
+    setResponseContent({})
+    const { serviceName, params } = service
+
+    request({
+      method: 'post',
+      url: `/dapi/service/${serviceName.toLowerCase()}`,
+      needToken: true,
+      jwt,
+      payload: params
+    })
+      .then(response => {
+        setResponseContent(response)
+        setResponseModal(true)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   const onDelete = () => {
     dispatch(deleteTableItem({ tableName, id: deleteItem.id }))
   }
@@ -159,6 +210,7 @@ export default function ContentTable ({ table }) {
   const isFirstPage = parseInt(page) === 1
   const isLastPage = parseInt(page) === Math.ceil(count / pageSize)
 
+  // console.log(rowActions)
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{tableName.toUpperCase()}</Typography>
@@ -178,7 +230,6 @@ export default function ContentTable ({ table }) {
           {allColumns.map(item => <Option key={table + '_' + item} value={item}>{item}</Option>)}
         </Select>
       </Box>
-
       <Table
         colCount={6}
         rowCount={10}
@@ -245,6 +296,10 @@ export default function ContentTable ({ table }) {
                       <IconButtonGroup>
                         <IconButton onClick={() => onRowClick(item)} label='Edit' icon={<Pencil />} />
                         <IconButton onClick={() => handleItemDelete(item)} label='Delete' icon={<Trash />} />
+                        {
+                          rowActions && rowActions.length > 0 &&
+                            <IconButton onClick={() => openActionsControl(rowActions, item)} label='Actions' icon={<Magic />} />
+                        }
                       </IconButtonGroup>
                     </Td>
                   </Tr>
@@ -270,6 +325,24 @@ export default function ContentTable ({ table }) {
         show={confirmModalOpen}
         onCancel={() => setConfirmModalOpen(false)}
         onConfirm={onConfirm}
+      />
+      <ServiceModal
+        show={serviceModal}
+        onCancel={() => setServiceModal(false)}
+        services={services}
+        onServiceCall={onServiceCall}
+      />
+      <ConfirmModal
+        hideCancel
+        show={responseModal}
+        ContentComponent={(
+          <Box>
+            <Typography variant='delta'>Service Result</Typography>
+            <ReactJson src={responseContent} name={false} style={{ marginTop: 12 }} />
+          </Box>
+        )}
+        onCancel={() => setResponseModal(false)}
+        onConfirm={() => setResponseModal(false)}
       />
     </Box>
   )
