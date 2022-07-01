@@ -89,6 +89,8 @@ export default function ContentDetail () {
         allColumns.map(attr => {
           const config = attributes[attr] || { type: 'string' }
           const data = contentDetail.data[attr]
+          const noInputData = typeof inputData[attr] === 'undefined'
+
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&
@@ -98,14 +100,12 @@ export default function ContentDetail () {
                   value={inputData[attr] || data || ''}
                   onChange={e => onValueChange(e.target.value, attr)}
                 />}
-              {config.type === 'integer' &&
+              {(config.type === 'integer' || config.type === 'number' || config.type === 'bigint') &&
                 <NumberInput
-                  id={attr}
+                  key={Math.random()}
                   name={attr}
                   label={attr}
-                  value={typeof inputData[attr] === 'undefined'
-                    ? data
-                    : (inputData[attr] || 0)}
+                  value={noInputData ? data : inputData[attr]}
                   onValueChange={e => onValueChange(e, attr)}
                 />}
               {config.type === 'boolean' &&
@@ -115,7 +115,7 @@ export default function ContentDetail () {
                     <CardSelect
                       style={{ marginTop: 12, marginRight: 12 }}
                       title='On'
-                      selected={typeof inputData[attr] === 'undefined'
+                      selected={noInputData
                         ? data === 1
                         : inputData[attr] === true}
                       onClick={() => onValueChange(true, attr)}
@@ -123,7 +123,7 @@ export default function ContentDetail () {
                     <CardSelect
                       style={{ marginTop: 12 }}
                       title='Off'
-                      selected={typeof inputData[attr] === 'undefined'
+                      selected={noInputData
                         ? data === 0
                         : inputData[attr] === false}
                       onClick={() => onValueChange(false, attr)}
@@ -137,7 +137,7 @@ export default function ContentDetail () {
                   onChange={e => {
                     onValueChange(e.target.value, attr)
                   }}
-                  value={typeof inputData[attr] === 'undefined'
+                  value={noInputData
                     ? JSON.stringify(data)
                     : inputData[attr]}
                 />}
@@ -150,30 +150,24 @@ export default function ContentDetail () {
                         style={{ marginTop: 12 }}
                         key={i}
                         title={i}
-                        selected={
-                          typeof inputData[attr] === 'undefined'
-                            ? data === i
-                            : inputData[attr] === i
-                        }
+                        selected={noInputData
+                          ? data === i
+                          : inputData[attr] === i}
                         onClick={() => onValueChange(i, attr)}
                       />
                     )
                   })}
                 </Flex>}
-              {
-                config.tableConfig?.showAsAvatar &&
-                  <Box paddingTop={4}>
-                    <Avatar src={data} />
-                  </Box>
-              }
-              {
-                config.join && config.join.table && data &&
-                  <Box paddingTop={4}>
-                    <Link to={`/content-detail/${config.join.table}/${data}`}>
-                      {`${config.join.table} - ${data}`}
-                    </Link>
-                  </Box>
-              }
+              {config.tableConfig?.showAsAvatar &&
+                <Box paddingTop={4}>
+                  <Avatar src={data} />
+                </Box>}
+              {config.join && config.join.table && data &&
+                <Box paddingTop={4}>
+                  <Link to={`/content-detail/${config.join.table}/${data}`}>
+                    {`${config.join.table} - ${data}`}
+                  </Link>
+                </Box>}
             </Box>
           )
         })
