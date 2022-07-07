@@ -36,16 +36,16 @@ export default function ContentDataPage () {
     <ContentPageContainer>
       <SubNav className='subnav' ariaLabel='Builder sub nav'>
         <SubNavHeader label='App数据表' />
-          <SubNavSections style={{ marginBottom: -10 }}>
-              {userSchemas.map(schema =>
-                <SubNavLink
-                  to={`/content/${schema.tableName}`}
-                  key={schema.tableName}
-                >
-                  {schema.displayName || schema.tableName}
-                </SubNavLink>
-              )}
-          </SubNavSections>
+        <SubNavSections style={{ marginBottom: -10 }}>
+            {userSchemas.map(schema =>
+              <SubNavLink
+                to={`/content/${schema.tableName}`}
+                key={schema.tableName}
+              >
+                {schema.displayName || schema.tableName}
+              </SubNavLink>
+            )}
+        </SubNavSections>
         <SubNavHeader label='Plugin数据表' />
         {Object.keys(grouiedPluginSchemas).map(key => {
           return (

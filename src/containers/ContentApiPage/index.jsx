@@ -24,39 +24,38 @@ const ContentPageContent = styled.div`
 
 export default function ContentApiPage () {
   const { tableName } = useParams()
-  const schemas = useSelector(state => state.content.schemas)
+  const routers = useSelector(state => state.api.routers)
+
   return (
     <ContentPageContainer>
       <SubNav ariaLabel='Builder sub nav'>
-        <SubNavHeader label='View Contents' />
-        <SubNavSections>
-          <SubNavSection label='Application API'>
-            {schemas
-              .filter(i => !i.hideInAdmin)
-              .filter(i => !i.isPluginSchema)
-              .map(schema =>
-                <SubNavLink
-                  to={`/content-api/${schema.tableName}`}
-                  key={schema.tableName}
-                >
-                  {schema.displayName || schema.tableName}
-                </SubNavLink>
-              )}
-          </SubNavSection>
-          <SubNavSection label='Plugin API'>
-            {schemas
-              .filter(i => !i.hideInAdmin)
-              .filter(i => i.isPluginSchema)
-              .map(schema =>
-                <SubNavLink
-                  to={`/content-api/${schema.tableName}`}
-                  key={schema.tableName}
-                >
-                  {schema.displayName || schema.tableName}
-                </SubNavLink>
-              )}
-          </SubNavSection>
+        <SubNavHeader label='Application API' />
+        <SubNavSections style={{ marginBottom: -10 }}>
+          {routers.filter(i => !i.pluginName).map(route => {
+            return (
+              <SubNavLink
+                to={`/content-api/${route.name}`}
+                key={route.name}
+              >
+                {route.name}
+              </SubNavLink>
+            )
+          })}
         </SubNavSections>
+        <SubNavHeader label='Plugin API' />
+        <SubNavSections style={{ marginBottom: -10 }}>
+          {routers.filter(i => !!i.pluginName).map(route => {
+            return (
+              <SubNavLink
+                to={`/content-api/${route.name}`}
+                key={route.name}
+              >
+                {route.name}
+              </SubNavLink>
+            )
+          })}
+        </SubNavSections>
+
       </SubNav>
       <ContentPageContent>
         {tableName && <ContentApi />}

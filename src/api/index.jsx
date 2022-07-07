@@ -38,6 +38,15 @@ export const request = async ({
 }
 
 const api = {
+  getAllRouters: async (payload, jwt) => {
+    return await request({
+      method: 'get',
+      url: '/dapi/routers/all',
+      needToken: true,
+      jwt
+    })
+  },
+
   callDapi: async (payload, jwt) => {
     const { tableName, callMethod, id, ...requestBody } = payload
     let url

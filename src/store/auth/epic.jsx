@@ -4,6 +4,7 @@ import { switchMap, mergeMap, catchError } from 'rxjs/operators'
 import api from '@api'
 import { login, setAuthData, getProfile } from './reducer'
 import { getSchemas } from '@store/content/reducer'
+import { getAllRouters } from '@store/api/reducer'
 
 export const getProfileEpic = action$ => action$.pipe(
   ofType(getProfile().type),
@@ -12,7 +13,8 @@ export const getProfileEpic = action$ => action$.pipe(
       switchMap((response) => {
         return concat(
           of(setAuthData({ user: response, jwt: action.payload.jwt })),
-          of(getSchemas())
+          of(getSchemas()),
+          of(getAllRouters())
         )
       })
     )
@@ -34,13 +36,15 @@ export const authEpic = action$ => action$.pipe(
           return concat(
             of(setAuthData({ user, jwt })),
             of(getSchemas()),
+            of(getAllRouters()),
             of(action.payload.onLogin)
           )
         }
 
         return concat(
           of(setAuthData({ user, jwt })),
-          of(getSchemas())
+          of(getSchemas()),
+          of(getAllRouters())
         )
       }),
       catchError(err => {
