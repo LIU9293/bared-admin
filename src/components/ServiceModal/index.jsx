@@ -1,7 +1,9 @@
 import { ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system/ModalLayout'
 import { Typography } from '@strapi/design-system/Typography'
 import { Button } from '@strapi/design-system/Button'
-import { Box } from '@strapi/design-system/Box'
+// import { Box } from '@strapi/design-system/Box'
+
+import RowActionRequestBox from '@components/RowActionRequestBox'
 
 export default function ServiceModal ({
   show,
@@ -10,6 +12,13 @@ export default function ServiceModal ({
   services,
   onServiceCall = () => {}
 }) {
+  const handleServiceCall = (data, service) => {
+    onServiceCall({
+      ...service,
+      params: { ...service.params, ...data }
+    })
+  }
+
   if (!show) return null
   return (
     <ModalLayout onClose={onCancel} labelledBy='title'>
@@ -19,11 +28,15 @@ export default function ServiceModal ({
         </Typography>
       </ModalHeader>
       <ModalBody>
-        {services.map((service, idx) => (
-          <Box padding={4} marginBottom={4} hasRadius background="neutral0" key={`box-${idx}`} shadow="tableShadow" className='pointer' onClick={() => onServiceCall(service)}>
-            <Typography>{service.text}</Typography>
-          </Box>)
-        )}
+        {services.map((service, idx) => {
+          return (
+            <RowActionRequestBox
+              key={idx}
+              {...service}
+              onServiceCall={e => handleServiceCall(e, service)}
+            />
+          )
+        })}
       </ModalBody>
       <ModalFooter
         endActions={(<Button variant='secondary' onClick={onCancel}>Cancel</Button>)}

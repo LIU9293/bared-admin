@@ -24,7 +24,6 @@ export const getAllRoutersEpic = (action$, state$) => action$.pipe(
   switchMap(([action, state]) =>
     from(api.getAllRouters(action.payload, state.auth.jwt)).pipe(
       switchMap(data => {
-        console.log(data)
         return of(
           setAllRouters({ routers: data })
         )

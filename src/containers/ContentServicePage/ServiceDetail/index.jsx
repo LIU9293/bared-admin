@@ -17,7 +17,6 @@ export default function ServiceDetail () {
   const { serviceName } = useParams()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
   const [inputData, setInputData] = useState({})
-  // const [isResponseError, setResponseError] = useState(false)
   const [responseContent, setResponseContent] = useState({})
   const jwt = useSelector(state => state.auth.jwt)
 
@@ -115,13 +114,11 @@ export default function ServiceDetail () {
       <Flex>
         <Button onClick={handleRequestButtonClick}>Request</Button>
       </Flex>
-      {
-        responseContent && JSON.stringify(responseContent) !== '{}' &&
+      {responseContent && JSON.stringify(responseContent) !== '{}' &&
         <Box paddingTop={8}>
           <Typography variant='delta'>Service Result</Typography>
           <ReactJson src={responseContent} name={false} style={{ marginTop: 12 }} />
-        </Box>
-      }
+        </Box>}
       <ConfirmModal
         content={`Call ${serviceName} Service?`}
         title='Confirm'

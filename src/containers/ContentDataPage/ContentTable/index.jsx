@@ -213,7 +213,6 @@ export default function ContentTable ({ table }) {
   const isFirstPage = parseInt(page) === 1
   const isLastPage = parseInt(page) === Math.ceil(count / pageSize)
 
-  // console.log(rowActions)
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{tableName.toUpperCase()}</Typography>
