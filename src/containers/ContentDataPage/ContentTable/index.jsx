@@ -145,9 +145,9 @@ export default function ContentTable ({ table }) {
 
   const openActionsControl = (rowActions, item) => {
     const services = rowActions.map(action => {
-      action.params = {}
-
       const { paramsMap = {}, fixedParams = {} } = action
+
+      action.params = { ...fixedParams }
 
       const paramsMapKeys = Object.keys(paramsMap) || []
       if (paramsMapKeys.length > 0) {
@@ -156,10 +156,6 @@ export default function ContentTable ({ table }) {
         })
       }
 
-      action.params = {
-        ...action.params,
-        ...fixedParams
-      }
       return action
     })
 
