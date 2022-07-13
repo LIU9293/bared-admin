@@ -156,11 +156,9 @@ export default function ContentTable ({ table }) {
         })
       }
 
-      const fixedParamsKeys = Object.keys(fixedParams) || []
-      if (fixedParamsKeys.length > 0) {
-        fixedParamsKeys.forEach(key => {
-          action.params[key] = fixedParams[key]
-        })
+      action.params = {
+        ...action.params,
+        ...fixedParams
       }
       return action
     })
