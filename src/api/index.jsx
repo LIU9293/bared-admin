@@ -5,7 +5,8 @@ export const request = async ({
   url,
   needToken = false,
   payload,
-  jwt
+  jwt,
+  endpoint
 }) => {
   const headers = {
     appid: 'test',
@@ -16,8 +17,8 @@ export const request = async ({
     headers.Authorization = `Bearer ${jwt}`
   }
 
-  const endpoint = window.localStorage.getItem('endpoint')
-  const response = await fetch(endpoint + url, {
+  const endpointFromStorage = window.localStorage.getItem('endpoint')
+  const response = await fetch((endpoint || endpointFromStorage) + url, {
     method,
     headers,
     body: JSON.stringify(payload)
@@ -98,12 +99,14 @@ const api = {
     })
   },
 
-  getProfile: async (jwt) => {
+  getProfile: async ({ jwt, endpoint }) => {
+    console.log(endpoint)
     return await request({
       method: 'get',
       url: '/papi/auth/profile',
       needToken: true,
-      jwt
+      jwt,
+      endpoint
     })
   },
 

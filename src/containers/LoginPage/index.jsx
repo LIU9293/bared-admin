@@ -30,9 +30,7 @@ export default function LoginPage () {
 
   const onLogin = () => {
     window.localStorage.setItem('endpoint', endpoint)
-    dispatch(
-      login({ username, password })
-    )
+    dispatch(login({ username, password }))
   }
 
   const handleLogin = () => {
@@ -58,10 +56,9 @@ export default function LoginPage () {
               title='Title'
               variant='danger'
             >
-              This is the default variant.
+              {error}
             </Alert>
         }
-
         <Typography variant='beta'>Bared CMS</Typography>
         <Box paddingBottom={4} paddingTop={4}>
           <TextInput
