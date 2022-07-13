@@ -88,6 +88,7 @@ export default function LoginPage () {
             name='Password'
             onChange={e => setPassword(e.target.value)}
             value={password}
+            type='password'
           />
         </Box>
         <Button onClick={handleLogin} fullWidth>

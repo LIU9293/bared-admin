@@ -145,12 +145,21 @@ export default function ContentTable ({ table }) {
 
   const openActionsControl = (rowActions, item) => {
     const services = rowActions.map(action => {
-      const { paramsMap } = action
-      const allKeys = Object.keys(paramsMap) || []
       action.params = {}
-      if (allKeys.length > 0) {
-        allKeys.forEach(key => {
+
+      const { paramsMap = {}, fixedParams = {} } = action
+
+      const paramsMapKeys = Object.keys(paramsMap) || []
+      if (paramsMapKeys.length > 0) {
+        paramsMapKeys.forEach(key => {
           action.params[key] = item[paramsMap[key]]
+        })
+      }
+
+      const fixedParamsKeys = Object.keys(fixedParams) || []
+      if (fixedParamsKeys.length > 0) {
+        fixedParamsKeys.forEach(key => {
+          action.params[key] = fixedParams[key]
         })
       }
       return action
