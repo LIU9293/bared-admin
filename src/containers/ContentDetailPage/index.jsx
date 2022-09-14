@@ -102,7 +102,7 @@ export default function ContentDetail () {
                 />}
               {(config.type === 'integer' || config.type === 'number' || config.type === 'bigint') &&
                 <NumberInput
-                  key={Math.random()}
+                  key={Math.random()} // hacky fix for change from NULL to number
                   name={attr}
                   label={attr}
                   value={noInputData ? data : inputData[attr]}

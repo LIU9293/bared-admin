@@ -6,7 +6,7 @@ import { VisuallyHidden } from '@strapi/design-system/VisuallyHidden'
 import { IconButtonGroup, IconButton } from '@strapi/design-system/IconButton'
 import { Box } from '@strapi/design-system/Box'
 import { Flex } from '@strapi/design-system/Flex'
-// import { Button } from '@strapi/design-system/Button'
+import { Button } from '@strapi/design-system/Button'
 import { Table, TFooter, Thead, Tbody, Tr, Td, Th } from '@strapi/design-system/Table'
 import { Typography } from '@strapi/design-system/Typography'
 import Plus from '@strapi/icons/Plus'
@@ -16,34 +16,31 @@ import CarretDown from '@strapi/icons/CarretDown'
 import CarretUp from '@strapi/icons/CarretUp'
 import Magic from '@strapi/icons/Magic'
 import { request } from '@api'
-// import Filter from '@strapi/icons/Filter'
 import ConfirmModal from '@components/ConfirmModal'
 import ServiceModal from '@components/ServiceModal'
 import { NextLink, Pagination, PreviousLink } from '@strapi/design-system/Pagination'
 import Avatar from '@components/Avatar'
 import { Select, Option } from '@strapi/design-system/Select'
 import ReactJson from 'react-json-view'
+import DynamicInput from '@components/DynamicInput'
 
 const pageSize = 20
-// const FilterOperations = [
-//   'is',
-//   'is not',
-//   'is lower than',
-//   'is lower than or equal',
-//   'is bigger than',
-//   'is bigger than or equal'
-// ]
 
 export default function ContentTable ({ table }) {
   const { tableName = table, page = 1 } = useParams()
   const [confirmModalOpen, setConfirmModalOpen] = useState(false)
-  // const [filterAreaOpen, setFilterAreaOpen] = useState(false)
+
+  const [enableFilter, setEnableFilter] = useState(false)
+  const [filterKey, setFilterKey] = useState(null)
+  const [filterValue, setFilterValue] = useState(null)
+
   const [deleteItem, setDeleteItem] = useState({})
   const [sortKey, setSortKey] = useState('id')
   const [sortDirection, setSortDirection] = useState('desc')
 
   const [visibleColumns, setVisibleColumns] = useState([])
   const [allColumns, setAllColumns] = useState([])
+  const [filterColumns, setFilterColumns] = useState([])
 
   const [services, setSerivces] = useState([])
   const [serviceModal, setServiceModal] = useState(false)
@@ -63,6 +60,7 @@ export default function ContentTable ({ table }) {
     state.content.schemas
       .find(i => i.tableName === tableName)?.attributes
   ) || {}
+
   const rowActions = useSelector(state =>
     state.content.schemas
       .find(i => i.tableName === tableName)?.rowActions
@@ -104,21 +102,22 @@ export default function ContentTable ({ table }) {
       }
     }
 
+    const cols = Object.keys(attributes)
+    const filterCols = []
+    cols.forEach(col => {
+      if (['integer', 'string'].indexOf(attributes[col].type) >= 0) {
+        filterCols.push(col)
+      }
+    })
+
     setVisibleColumns(visible)
     setAllColumns(['id', 'created_at'].concat(Object.keys(attributes)))
+    setFilterColumns(filterCols)
   }
 
   useEffect(() => {
     setColumnToDefault()
   }, [attributes, tableName])
-
-  // const onFilterColumnChange = e => {
-  //   console.log(e)
-  // }
-
-  // const onFilterTypeChange = e => {
-  //   console.log(e)
-  // }
 
   useEffect(() => {
     setSortKey('id')
@@ -127,13 +126,17 @@ export default function ContentTable ({ table }) {
 
   useEffect(() => {
     if (tableName) {
-      dispatch(getTableData({
+      const params = {
         tableName,
         page: parseInt(page),
         pageSize,
         sortKey,
         sortDirection
-      }))
+      }
+
+      dispatch(getTableData(enableFilter
+        ? { ...params, filterKey, filterValue }
+        : params))
     }
     // TODO: fix table change but sortKey out of range in next table
   }, [tableName, page, sortKey, sortDirection])
@@ -209,13 +212,53 @@ export default function ContentTable ({ table }) {
     }
   }
 
+  const onSetFilterKey = col => {
+    setEnableFilter(false)
+    setFilterKey(col)
+  }
+
+  const onFilterValueChange = e => {
+    setFilterValue(e)
+  }
+
+  const clearFilter = () => {
+    setEnableFilter(false)
+    setFilterKey(null)
+    setFilterValue(null)
+    const params = {
+      tableName,
+      page: parseInt(page),
+      pageSize,
+      sortKey,
+      sortDirection
+    }
+
+    dispatch(getTableData(params))
+  }
+
+  const onApplyFilter = () => {
+    setEnableFilter(true)
+
+    const params = {
+      tableName,
+      page: parseInt(page),
+      pageSize,
+      sortKey,
+      sortDirection
+    }
+
+    dispatch(getTableData({ ...params, filterKey, filterValue }))
+  }
+
   const { data, count } = tableData
   const isFirstPage = parseInt(page) === 1
   const isLastPage = parseInt(page) === Math.ceil(count / pageSize)
 
+  console.log(page)
   return (
     <Box padding={8} background='neutral100'>
       <Typography variant='alpha'>{tableName.toUpperCase()}</Typography>
+
       <Box paddingBottom={4}>
         <Typography variant='epsilon'>{`${count} items found.`}</Typography>
       </Box>
@@ -232,6 +275,65 @@ export default function ContentTable ({ table }) {
           {allColumns.map(item => <Option key={table + '_' + item} value={item}>{item}</Option>)}
         </Select>
       </Box>
+
+      <Box paddingBottom={4}>
+        <Box paddingBottom={2}>
+          <Typography variant='pi' fontWeight='bold'>Filters</Typography>
+        </Box>
+
+        <Flex>
+          <Select
+            placeholder='Choose columns to filter'
+            value={filterKey}
+            onChange={onSetFilterKey}
+          >
+            {filterColumns.map(item => <Option key={table + '_' + item} value={item}>{item}</Option>)}
+          </Select>
+          {
+            filterKey && attributes[filterKey] &&
+              <Box paddingLeft={4} paddingRight={4}>=</Box>
+          }
+          {
+            filterKey && attributes[filterKey] &&
+              <DynamicInput
+                name={filterKey}
+                value={filterValue}
+                onValueChange={onFilterValueChange}
+                type={attributes[filterKey].type}
+              />
+          }
+          {
+            filterKey && attributes[filterKey] &&
+              <>
+                <Box paddingLeft={4}>
+                  <Button onClick={onApplyFilter}>
+                    Confirm
+                  </Button>
+                </Box>
+                <Box paddingLeft={4}>
+                  <Button onClick={clearFilter} variant='tertiary'>
+                    Cancel
+                  </Button>
+                </Box>
+              </>
+          }
+        </Flex>
+      </Box>
+
+      <Flex justifyContent='space-between'>
+        <Typography variant='epsilon'>{`Showing ${((page - 1) * pageSize) + 1} - ${(page * pageSize)} items`}</Typography>
+        <Pagination activePage={parseInt(page)} pageCount={Math.ceil(count / pageSize)}>
+          {
+            !isFirstPage &&
+              <PreviousLink to={`/content/${tableName}/${parseInt(page) - 1}`}>Previous</PreviousLink>
+          }
+          {
+            !isLastPage &&
+              <NextLink to={`/content/${tableName}/${parseInt(page) + 1}`}>Next</NextLink>
+          }
+        </Pagination>
+      </Flex>
+
       <Table
         colCount={6}
         rowCount={10}

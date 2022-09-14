@@ -191,13 +191,29 @@ const api = {
       page = 1,
       pageSize = 20,
       sortKey = 'id',
-      sortDirection = 'desc'
+      sortDirection = 'desc',
+      filterKey = '',
+      filterValue = ''
     } = payload
 
     const _start = (page - 1) * pageSize
     const _limit = pageSize
 
-    const q = new URLSearchParams({ _start, _limit, _sort: `${sortKey}:${sortDirection}` })
+    const params = {
+      _start,
+      _limit,
+      _sort: `${sortKey}:${sortDirection}`
+    }
+
+    const countPamras = {}
+    if (filterKey && filterValue) {
+      params[`${filterKey}~eq`] = filterValue
+      countPamras[`${filterKey}~eq`] = filterValue
+    }
+
+    const q = new URLSearchParams(params)
+    const q2 = new URLSearchParams(countPamras)
+
     const result = await Promise.all([
       request({
         method: 'get',
@@ -207,7 +223,7 @@ const api = {
       }),
       request({
         method: 'get',
-        url: `/dapi/${payload.tableName}/count`,
+        url: `/dapi/${payload.tableName}/count?${q2.toString()}`,
         needToken: true,
         jwt
       })
