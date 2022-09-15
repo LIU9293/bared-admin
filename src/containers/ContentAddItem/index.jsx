@@ -32,7 +32,7 @@ export default function ContentDetail () {
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&
                 <TextInput name={attr} label={attr} value={data} onValueChange={() => {}} />}
-              {config.type === 'integer' &&
+              {(config.type === 'integer' || config.type === 'float' || config.type === 'bigint' || config.type === 'number') &&
                 <NumberInput name={attr} label={attr} value={data} onValueChange={() => {}} />}
               {config.type === 'boolean' &&
                 <ToggleInput

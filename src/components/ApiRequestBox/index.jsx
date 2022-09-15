@@ -149,7 +149,7 @@ export default function ApiRequestBox ({
                           onChange={e => onValueChange(e.target.value, attr)}
                           value={inputData[attr] || ''}
                         />}
-                      {config.type === 'integer' &&
+                      {(config.type === 'integer' || config.type === 'number' || config.type === 'float') &&
                         <NumberInput
                           name={attr}
                           label={attr}

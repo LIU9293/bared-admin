@@ -18,9 +18,8 @@ export default function DynamicInput ({
           value={value || ''}
           onChange={e => onValueChange(e.target.value, name)}
         />}
-      {(type === 'integer' || type === 'number' || type === 'bigint') &&
+      {(type === 'integer' || type === 'number' || type === 'float' || type === 'bigint') &&
         <NumberInput
-          // key={Math.random()}
           aria-label={name}
           name={name}
           value={value || 0}

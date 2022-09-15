@@ -100,7 +100,7 @@ export default function ContentDetail () {
                   value={inputData[attr] || data || ''}
                   onChange={e => onValueChange(e.target.value, attr)}
                 />}
-              {(config.type === 'integer' || config.type === 'number' || config.type === 'bigint') &&
+              {(config.type === 'integer' || config.type === 'number' || config.type === 'float' || config.type === 'bigint') &&
                 <NumberInput
                   key={Math.random()} // hacky fix for change from NULL to number
                   name={attr}
