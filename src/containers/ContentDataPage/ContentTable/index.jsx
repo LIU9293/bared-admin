@@ -103,7 +103,7 @@ export default function ContentTable ({ table }) {
     }
 
     const cols = Object.keys(attributes)
-    const filterCols = []
+    const filterCols = ['id']
     cols.forEach(col => {
       if (['integer', 'string'].indexOf(attributes[col].type) >= 0) {
         filterCols.push(col)
