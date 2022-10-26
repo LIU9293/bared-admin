@@ -53,6 +53,7 @@ export default function ContentServicePage () {
             <SubNavSections key={key} style={{ marginBottom: -10 }}>
               <SubNavSection label={key}>
                 {grouiedAppServices[key]
+                  .filter(i => i.showInAdmin)
                   .map(service =>
                     <SubNavLink
                       to={`/content-service/${service.name}`}
@@ -71,14 +72,11 @@ export default function ContentServicePage () {
             <SubNavSections key={key} style={{ marginBottom: -10 }}>
               <SubNavSection label={key}>
                 {grouiedPluginServices[key]
-                  .map(service =>
-                    <SubNavLink
-                      to={`/content-service/${service.name}`}
-                      key={service.name}
-                    >
+                  .map(service => (
+                    <SubNavLink to={`/content-service/${service.name}`} key={service.name}>
                       {service.name}
                     </SubNavLink>
-                  )}
+                  ))}
               </SubNavSection>
             </SubNavSections>
           )
