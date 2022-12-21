@@ -26,6 +26,11 @@ export default function LoginPage () {
       window.localStorage.setItem('jwt', jwt)
       navigate(from, { replace: true })
     }
+
+    const endp = window.localStorage.getItem('endpoint')
+    if (endp) {
+      dispatch(setEndpoint({ endpoint: endp }))
+    }
   }, [jwt])
 
   const onLogin = () => {

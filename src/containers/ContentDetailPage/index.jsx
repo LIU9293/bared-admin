@@ -90,7 +90,9 @@ export default function ContentDetail () {
           const config = attributes[attr] || { type: 'string' }
           const data = contentDetail.data[attr]
           const noInputData = typeof inputData[attr] === 'undefined'
-
+          if (typeof (noInputData ? data : inputData[attr]) === 'undefined') {
+            return null
+          }
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&

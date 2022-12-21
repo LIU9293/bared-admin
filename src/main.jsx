@@ -1,7 +1,5 @@
 import React from 'react'
-// import ReactDOM from 'react-dom/client'
-import { render } from 'react-dom'
-
+import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import configureStore from '@store'
@@ -14,9 +12,8 @@ const store = configureStore()
 window.store = store
 
 const container = document.getElementById('root')
-// const root = ReactDOM.createRoot(container)
-
-render(
+const root = createRoot(container)
+root.render(
   <ThemeProvider theme={lightTheme}>
     <Provider store={store}>
       <BrowserRouter>
@@ -24,14 +21,4 @@ render(
       </BrowserRouter>
     </Provider>
   </ThemeProvider>
-  , container)
-
-// root.render(
-//   <ThemeProvider theme={lightTheme}>
-//     <Provider store={store}>
-//       <BrowserRouter>
-//         <App />
-//       </BrowserRouter>
-//     </Provider>
-//   </ThemeProvider>
-// )
+)

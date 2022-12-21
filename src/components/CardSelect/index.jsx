@@ -12,10 +12,10 @@ export default function CardSelect ({
   return (
     <div
       onClick={onClick} className={`
-      card-select
-      ${selected ? 'card-select-active' : ''}
-      ${className || ''}
-    `}
+        card-select
+        ${selected ? 'card-select-active' : ''}
+        ${className || ''}
+      `}
       style={style}
     >
       <div className='card-select-ratio'>

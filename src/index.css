@@ -11,15 +11,7 @@ body {
   /* min-height: 100%; */
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-}
-
-#root div {
-  /* box-sizing: border-box; */
-  /* position: relative; */
-}
+code { font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace; }
 
 .app {
   display: flex;
@@ -42,13 +34,7 @@ code {
   min-height: 500px;
 }
 
-.pointer {
-  cursor: pointer;
-}
-
-.subnav {
-  width: 16rem !important;
-}
-
+.pointer { cursor: pointer; }
+.subnav { width: 16rem !important; }
 .mt8 { margin-top: 8px; }
 .mt16 { margin-top: 16px; }
