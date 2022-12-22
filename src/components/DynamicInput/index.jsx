@@ -1,7 +1,4 @@
-import { Box } from '@strapi/design-system/Box'
-import { TextInput } from '@strapi/design-system/TextInput'
-import { Textarea } from '@strapi/design-system/Textarea'
-import { NumberInput } from '@strapi/design-system/NumberInput'
+import { Box, TextInput, Textarea, NumberInput } from '@strapi/design-system'
 
 export default function DynamicInput ({
   type,

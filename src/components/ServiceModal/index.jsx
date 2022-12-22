@@ -1,8 +1,4 @@
-import { ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system/ModalLayout'
-import { Typography } from '@strapi/design-system/Typography'
-import { Button } from '@strapi/design-system/Button'
-// import { Box } from '@strapi/design-system/Box'
-
+import { Button, Typography, ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system'
 import RowActionRequestBox from '@components/RowActionRequestBox'
 
 export default function ServiceModal ({

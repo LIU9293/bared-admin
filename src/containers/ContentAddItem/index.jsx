@@ -2,14 +2,10 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import { getDetail } from '@store/content/reducer'
-import { Typography } from '@strapi/design-system/Typography'
-import { Box } from '@strapi/design-system/Box'
-import { TextInput } from '@strapi/design-system/TextInput'
-import { NumberInput } from '@strapi/design-system/NumberInput'
-import { ToggleInput } from '@strapi/design-system/ToggleInput'
-import { Textarea } from '@strapi/design-system/Textarea'
+import { Textarea, ToggleInput, NumberInput, TextInput, Box, Typography } from '@strapi/design-system'
 
 export default function ContentDetail () {
+  console.log('=====')
   const { tableName, id } = useParams()
   const dispatch = useDispatch()
   const contentDetail = useSelector(state => state.content.contentDetail)

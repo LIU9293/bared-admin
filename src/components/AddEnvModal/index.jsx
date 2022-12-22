@@ -1,9 +1,5 @@
 import { useState } from 'react'
-import { ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system/ModalLayout'
-import { Typography } from '@strapi/design-system/Typography'
-import { Button } from '@strapi/design-system/Button'
-import { TextInput } from '@strapi/design-system/TextInput'
-import { Box } from '@strapi/design-system/Box'
+import { Typography, Button, TextInput, Box, ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system'
 
 export default function AddEnvModal ({ show, onCancel, onAdd }) {
   if (!show) return null

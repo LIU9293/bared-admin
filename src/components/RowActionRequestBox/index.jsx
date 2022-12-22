@@ -1,10 +1,5 @@
 import { useState } from 'react'
-import { Typography } from '@strapi/design-system/Typography'
-import { Button } from '@strapi/design-system/Button'
-import { TextInput } from '@strapi/design-system/TextInput'
-import { ToggleInput } from '@strapi/design-system/ToggleInput'
-import { Box } from '@strapi/design-system/Box'
-import { Flex } from '@strapi/design-system/Flex'
+import { Typography, Button, TextInput, ToggleInput, Box, Flex } from '@strapi/design-system'
 
 export default function RowActionRequestBox ({
   text,

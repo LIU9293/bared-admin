@@ -6,7 +6,7 @@ import {
   SubNavSection,
   SubNavSections,
   SubNavLink
-} from '@strapi/design-system/SubNav'
+} from '@strapi/design-system'
 import styled from 'styled-components'
 import { groupBy } from 'ramda'
 import ContentTable from './ContentTable'

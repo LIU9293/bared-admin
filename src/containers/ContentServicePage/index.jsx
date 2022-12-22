@@ -7,7 +7,7 @@ import {
   SubNavSection,
   SubNavSections,
   SubNavLink
-} from '@strapi/design-system/SubNav'
+} from '@strapi/design-system'
 import styled from 'styled-components'
 import { getService } from '@store/content/reducer'
 import { groupBy, pipe, filter } from 'ramda'

@@ -1,12 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import { Box } from '@strapi/design-system/Box'
-import { Typography } from '@strapi/design-system/Typography'
-import { Button } from '@strapi/design-system/Button'
+import { Flex, Button, Typography, Box } from '@strapi/design-system'
 import ConfirmModal from '@components/ConfirmModal'
 import CardSelect from '@components/CardSelect'
 import Avatar from '@components/Avatar'
-import { Flex } from '@strapi/design-system/Flex'
 import AddEnvModal from '@components/AddEnvModal'
 
 export default function UserPage () {

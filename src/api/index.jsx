@@ -100,7 +100,6 @@ const api = {
   },
 
   getProfile: async ({ jwt, endpoint }) => {
-    console.log(endpoint)
     return await request({
       method: 'get',
       url: '/papi/auth/profile',

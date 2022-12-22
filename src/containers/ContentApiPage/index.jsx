@@ -3,10 +3,9 @@ import { useParams } from 'react-router-dom'
 import {
   SubNav,
   SubNavHeader,
-  SubNavSection,
   SubNavSections,
   SubNavLink
-} from '@strapi/design-system/SubNav'
+} from '@strapi/design-system'
 import styled from 'styled-components'
 import ContentApi from './ContentApi'
 

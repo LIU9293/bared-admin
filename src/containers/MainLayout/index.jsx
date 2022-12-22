@@ -2,7 +2,6 @@ import BaredLogo from '@assets/img/2.png'
 import { useSelector } from 'react-redux'
 import { useState } from 'react'
 import { Outlet, Link } from 'react-router-dom'
-import { Divider } from '@strapi/design-system/Divider'
 import {
   MainNav,
   NavSection,
@@ -10,8 +9,9 @@ import {
   NavCondense,
   NavBrand,
   NavUser,
-  NavLink
-} from '@strapi/design-system/MainNav'
+  NavLink,
+  Divider
+} from '@strapi/design-system'
 import Layer from '@strapi/icons/Layer'
 import Puzzle from '@strapi/icons/Puzzle'
 import Cup from '@strapi/icons/Cup'

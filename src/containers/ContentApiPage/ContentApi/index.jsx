@@ -2,10 +2,7 @@ import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 // import { getApi } from '@store/content/reducer'
-import { Box } from '@strapi/design-system/Box'
-import { Typography } from '@strapi/design-system/Typography'
-import { Badge } from '@strapi/design-system/Badge'
-import { Accordion, AccordionToggle, AccordionContent } from '@strapi/design-system/Accordion'
+import { Box, Typography, Badge, Accordion, AccordionToggle, AccordionContent } from '@strapi/design-system'
 import ApiRequestBox from '@components/ApiRequestBox'
 
 // const deveoperApi = (tableName, schemas) => {

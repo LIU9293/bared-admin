@@ -1,13 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, useNavigate, Link } from 'react-router-dom'
-import { Typography } from '@strapi/design-system/Typography'
-import { Box } from '@strapi/design-system/Box'
-import { Flex } from '@strapi/design-system/Flex'
-import { TextInput } from '@strapi/design-system/TextInput'
-import { Textarea } from '@strapi/design-system/Textarea'
-import { Button } from '@strapi/design-system/Button'
-import { NumberInput } from '@strapi/design-system/NumberInput'
+import { NumberInput, Button, Textarea, TextInput, Flex, Box, Typography } from '@strapi/design-system'
 import CardSelect from '@components/CardSelect'
 import Avatar from '@components/Avatar'
 import ConfirmModal from '@components/ConfirmModal'
@@ -82,7 +76,8 @@ export default function ContentDetail () {
   return (
     <Box padding={8} style={{ width: '100%' }}>
       <Box paddingBottom={4}>
-        <Typography variant='alpha'>{isAdd ? 'Add item' + ' ' + tableName : `${tableName} - ID ${id}`}
+        <Typography variant='alpha'>
+          {isAdd ? 'Add item' + ' ' + tableName : `${tableName} - ID ${id}`}
         </Typography>
       </Box>
       {
@@ -90,9 +85,11 @@ export default function ContentDetail () {
           const config = attributes[attr] || { type: 'string' }
           const data = contentDetail.data[attr]
           const noInputData = typeof inputData[attr] === 'undefined'
-          if (typeof (noInputData ? data : inputData[attr]) === 'undefined') {
+
+          if (!isAdd && typeof (noInputData ? data : inputData[attr]) === 'undefined') {
             return null
           }
+
           return (
             <Box paddingBottom={4} key={attr}>
               {config.type === 'string' &&
@@ -159,7 +156,7 @@ export default function ContentDetail () {
                     )
                   })}
                 </Flex>}
-              {config.tableConfig?.showAsAvatar &&
+              {config.tableConfig?.showAsAvatar && !isAdd &&
                 <Box paddingTop={4}>
                   <Avatar src={data} />
                 </Box>}

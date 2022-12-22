@@ -1,6 +1,4 @@
-import { ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system/ModalLayout'
-import { Typography } from '@strapi/design-system/Typography'
-import { Button } from '@strapi/design-system/Button'
+import { Typography, Button, ModalLayout, ModalBody, ModalHeader, ModalFooter } from '@strapi/design-system'
 
 export default function ConfirmModal ({ show, onCancel, confirmText, onConfirm, title, content, ContentComponent = null, hideCancel = false }) {
   if (!show) return null
